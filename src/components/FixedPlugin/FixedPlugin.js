@@ -114,7 +114,7 @@ function FixedPlugin({
                 setImage(sideBarImage1);
               }}
             >
-              <img alt="..." src={sideBarImage1}></img>
+              <img alt="..." src={sideBarImage2}></img>
             </a>
           </li>
           <li className={image === sideBarImage2 ? "active" : ""}>

@@ -30,7 +30,7 @@ function User() {
                       <Form.Group>
                         <label>Company (disabled)</label>
                         <Form.Control
-                          defaultValue="Creative Code Inc."
+                          defaultValue="Env Monitor"
                           disabled
                           placeholder="Company"
                           type="text"
@@ -130,8 +130,7 @@ function User() {
                         <label>About Me</label>
                         <Form.Control
                           cols="80"
-                          defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                          that two seat Lambo."
+                          defaultValue="Lorem Epsom Lorem Epsom Lorem Epsom Lorem Epsom"
                           placeholder="Here can be your description"
                           rows="4"
                           as="textarea"
@@ -168,16 +167,16 @@ function User() {
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/faces/face-3.jpg").default}
+                      src={require("assets/img/faces/face-0.jpg").default}
                     ></img>
                     <h5 className="title">Mike Andrew</h5>
                   </a>
                   <p className="description">michael24</p>
                 </div>
                 <p className="description text-center">
-                  "Lamborghini Mercy <br></br>
-                  Your chick she so thirsty <br></br>
-                  I'm in that two seat Lambo"
+                  "Lorem Epsom <br></br>
+                  Lorem Epsom Lorem Epsom Lorem Epsom <br></br>
+                  Lorem Epsom Lorem Epsom"
                 </p>
               </Card.Body>
               <hr></hr>

@@ -1,51 +1,98 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  GoogleMap,
+  useLoadScript,
+  DirectionsRenderer,
+  DirectionsService,
+} from "@react-google-maps/api";
 
-// react-bootstrap components
-import { Badge, Button, Navbar, Nav, Container } from "react-bootstrap";
+const libraries = ["places"];
+const mapContainerStyle = {
+  width: "65vw",
+  height: "75vh",
+  borderRadius: "10px",
+};
+const center = {
+  lat: 23.522431430261793,
+  lng: 87.31047119682235,
+};
 
-function Maps() {
-  const mapRef = React.useRef(null);
-  React.useEffect(() => {
-    let google = window.google;
-    let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
-    const myLatlng = new google.maps.LatLng(lat, lng);
-    const mapOptions = {
-      zoom: 13,
-      center: myLatlng,
-      scrollwheel: false,
-      zoomControl: true,
-    };
+const RouteRecommend = () => {
+  const [response, setResponse] = useState(null);
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
 
-    map = new google.maps.Map(map, mapOptions);
+  if (loadError) return "Error loading Maps";
+  if (!isLoaded) return "Loading Google Maps...";
 
-    const marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      title: "Light Bootstrap Dashboard PRO React!",
-    });
+  const directionsCallback = (res) => {
+    console.log(res);
 
-    const contentString =
-      '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
-      "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
+    if (res !== null) {
+      if (res.status === "OK") {
+        setResponse(res);
+      } else {
+        console.log("response: ", res);
+      }
+    }
+  };
 
-    const infowindow = new google.maps.InfoWindow({
-      content: contentString,
-    });
-
-    google.maps.event.addListener(marker, "click", function () {
-      infowindow.open(map, marker);
-    });
-  }, []);
   return (
-    <>
-      <div className="map-container">
-        <div id="map" ref={mapRef}></div>
-      </div>
-    </>
+    <div>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={10}
+        center={center}
+      >
+        <DirectionsService
+          // required
+          options={{
+            destination: { lat: 23.547868393030193, lng: 87.29303100896361 },
+            origin: { lat: 23.535975578980082, lng: 87.29752733862512 },
+            travelMode: "DRIVING",
+          }}
+          // required
+          callback={directionsCallback}
+          // optional
+          onLoad={(directionsService) => {
+            console.log(
+              "DirectionsService onLoad directionsService: ",
+              directionsService
+            );
+          }}
+          // optional
+          onUnmount={(directionsService) => {
+            console.log(
+              "DirectionsService onUnmount directionsService: ",
+              directionsService
+            );
+          }}
+        />
+        <DirectionsRenderer
+          // required
+          options={{
+            directions: response,
+          }}
+          // optional
+          onLoad={(directionsRenderer) => {
+            console.log(
+              "DirectionsRenderer onLoad directionsRenderer: ",
+              directionsRenderer
+            );
+          }}
+          // optional
+          onUnmount={(directionsRenderer) => {
+            console.log(
+              "DirectionsRenderer onUnmount directionsRenderer: ",
+              directionsRenderer
+            );
+          }}
+        />
+      </GoogleMap>
+    </div>
   );
-}
+};
 
-export default Maps;
+export default RouteRecommend;

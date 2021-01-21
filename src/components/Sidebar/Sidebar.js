@@ -16,7 +16,7 @@
 
 */
 import React, { Component } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { useLocation, NavLink, Route } from "react-router-dom";
 
 import { Nav } from "react-bootstrap";
 
@@ -48,9 +48,13 @@ function Sidebar({ color, image, routes }) {
               />
             </div>
           </a>
-          <a className="simple-text" href="http://www.creative-tim.com">
-            Creative Tim
-          </a>
+          {/*<a className="simple-text" onClick={() => {}}>
+            Env Monitor
+          </a>*/}
+
+          <NavLink to="/" className="simple-text">
+            Env Monitor
+          </NavLink>
         </div>
         <Nav>
           {routes.map((prop, key) => {
