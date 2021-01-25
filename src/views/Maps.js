@@ -101,6 +101,15 @@ const RouteRecommend = () => {
               zoom={14}
               center={center}
             >
+              <Marker
+                position={currentpos}
+                icon={{
+                  url: "/logo.svg",
+                  scaledSize: new window.google.maps.Size(50, 50),
+                  origin: new window.google.maps.Point(0, 0),
+                  anchor: new window.google.maps.Point(25, 25),
+                }}
+              />
               {destination && (
                 <DirectionsService
                   // required
