@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   GoogleMap,
   useLoadScript,
@@ -6,8 +6,19 @@ import {
   DirectionsService,
   Marker,
 } from "@react-google-maps/api";
-import { Card, Col, Container, ProgressBar, Row } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Form,
+  FormControl,
+  InputGroup,
+  ProgressBar,
+  Row,
+  Button,
+} from "react-bootstrap";
 import _ from "lodash";
+import "./Maps.css";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -27,7 +38,9 @@ const RouteRecommend = () => {
     libraries,
   });
   const [currentpos, setCurrentpos] = useState({});
-  // let watchID;
+  const [destination, setDestination] = useState("city centre durgapur");
+  const destRef = useRef(null);
+  let watchID;
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log("moved in current");
@@ -38,7 +51,7 @@ const RouteRecommend = () => {
     });
 
     const watchID = navigator.geolocation.watchPosition((position) => {
-      alert("moved in watch", {
+      console.log("moved in watch", {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       });
@@ -51,13 +64,19 @@ const RouteRecommend = () => {
           enableHighAccuracy: true,
           timeout: 20000,
           maximumAge: 0,
-          distanceFilter: 1,
+          // distanceFilter: 100,
         };
     });
   }, []);
 
   if (loadError) return "Error loading Maps";
   if (!isLoaded) return "Loading Google Maps...";
+
+  const handleSubmit = () => {
+    if (destination) {
+      setDestination(destRef.current.value);
+    }
+  };
 
   const directionsCallback = (res) => {
     console.log(res, "res in directionsCallback");
@@ -79,26 +98,14 @@ const RouteRecommend = () => {
           <Col md={7}>
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
-              zoom={20}
+              zoom={14}
               center={center}
             >
-              <Marker
-                position={currentpos}
-                icon={{
-                  url: "/logo.svg",
-                  scaledSize: new window.google.maps.Size(50, 50),
-                  origin: new window.google.maps.Point(0, 0),
-                  anchor: new window.google.maps.Point(25, 25),
-                }}
-              />
-              {currentpos.lat && (
+              {destination && (
                 <DirectionsService
                   // required
                   options={{
-                    destination: {
-                      lat: 23.547868393030193,
-                      lng: 87.29303100896361,
-                    },
+                    destination,
                     origin: currentpos,
                     travelMode: "WALKING",
                   }}
@@ -120,7 +127,7 @@ const RouteRecommend = () => {
                   }}
                 />
               )}
-              {currentpos.lat && (
+              {destination && (
                 <DirectionsRenderer
                   // required
                   options={{
@@ -144,10 +151,31 @@ const RouteRecommend = () => {
               )}
             </GoogleMap>
           </Col>
+
           <Col md={5}>
             <Card>
               <Card.Body>
                 <ProgressBar animated now={45} />
+                <InputGroup className="mb-3 input-margin">
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id="basic-addon3">
+                      Destination
+                    </InputGroup.Text>
+                  </InputGroup.Prepend>
+                  <FormControl
+                    ref={destRef}
+                    id="basic-url"
+                    aria-describedby="basic-addon3"
+                  />
+                </InputGroup>
+                <Button
+                  onClick={handleSubmit}
+                  className="btn-fill"
+                  variant="primary"
+                  size="md"
+                >
+                  Submit
+                </Button>
               </Card.Body>
             </Card>
           </Col>
