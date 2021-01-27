@@ -22,6 +22,8 @@ import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
+import "lodash.product";
+import _ from "lodash";
 
 import routes from "routes.js";
 
