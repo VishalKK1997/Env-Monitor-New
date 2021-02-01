@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import { Rectangle, InfoWindow } from "@react-google-maps/api";
 
+import GridDataTable from "./GridDataTable";
+
 const RectangleWithInfoWindow = (props) => {
   const [isClicked, setClicked] = useState(false);
 
@@ -18,8 +20,6 @@ const RectangleWithInfoWindow = (props) => {
         key={props.point.id}
         onClick={() => {
           setClicked(true);
-          console.log(isClicked);
-          props.handleClick();
         }}
         bounds={{
           north: props.point.ne.lat,
@@ -45,7 +45,7 @@ const RectangleWithInfoWindow = (props) => {
             lng: (props.point.ne.lng + props.point.sw.lng) / 2,
           }}
         >
-          <span>{props.point.info}</span>
+          <GridDataTable gridId={props.point.id} />
         </InfoWindow>
       )}
     </div>

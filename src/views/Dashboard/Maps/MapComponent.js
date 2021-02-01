@@ -36,18 +36,17 @@ const MapComponent = (props) => {
               center={props.center}
             >
               {props.geodata &&
-                props.geodata.map((point) => (
+                props.geodata.map((point, idx) => (
                   <RectangleWithInfoWindow
-                    handleClick={() => {
-                      console.log(point.id);
-                    }}
+                    key={"Rectagle" + idx}
                     point={point}
                   />
                 ))}
 
-              {props.hoteldata &&
-                props.hoteldata.map((hotel) => (
+              {props.hotelData &&
+                props.hotelData.map((hotel, idx) => (
                   <MarkerWithInfoWindow
+                    key={"Marker" + idx}
                     position={hotel.location}
                     info={
                       <div>

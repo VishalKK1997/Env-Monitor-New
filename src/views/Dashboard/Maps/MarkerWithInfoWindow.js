@@ -5,7 +5,6 @@ import { Marker, InfoWindow } from "@react-google-maps/api";
 const MarkerWithInfoWindow = (props) => {
   const [isClicked, setClicked] = useState(false);
 
-  console.log(props);
   return (
     <Marker
       position={props.position}
