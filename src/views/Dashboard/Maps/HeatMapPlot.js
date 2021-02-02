@@ -63,7 +63,7 @@ function simulateNetworkRequest(dateTime) {
 }
 
 // Get Current Date Time for first load.
-function getCurrentDateTime() {
+const getCurrentDateTime = () => {
   let currentDateTime = new Date();
   return (
     currentDateTime.getFullYear() +
@@ -81,7 +81,7 @@ function getCurrentDateTime() {
     currentDateTime.getMinutes()
   );
   //2021-02-02T00:21
-}
+};
 
 const HeatMapPlot = () => {
   const [isLoading, setLoading] = useState(true);
@@ -148,18 +148,24 @@ const HeatMapPlot = () => {
                   </thead>
                   <tbody>
                     <tr>
+                      <td style={{ backgroundColor: "#900d0b" }}></td>
                       <td>1</td>
-                      <td>2</td>
-                      <td>3</td>
-                      <td>4</td>
-                      <td>5</td>
                     </tr>
                     <tr>
-                      <td style={{ backgroundColor: "#900d0b" }}></td>
                       <td style={{ backgroundColor: "#ed0202" }}></td>
+                      <td>2</td>
+                    </tr>
+                    <tr>
                       <td style={{ backgroundColor: "#ec9704" }}></td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
                       <td style={{ backgroundColor: "#85d511" }}></td>
+                      <td>4</td>
+                    </tr>
+                    <tr>
                       <td style={{ backgroundColor: "#1d9f32" }}></td>
+                      <td>5</td>
                     </tr>
                   </tbody>
                 </Table>
