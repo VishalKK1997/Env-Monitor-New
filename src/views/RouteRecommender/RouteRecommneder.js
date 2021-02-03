@@ -39,7 +39,7 @@ import {
 const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
-  height: "75vh",
+  height: "83vh",
   borderRadius: "10px",
 };
 const center = {
@@ -176,8 +176,10 @@ const RouteRecommender = () => {
 
           <Col md={5}>
             <Card>
+              <Card.Header>
+                <Card.Title as="h4">Route Recommendation</Card.Title>
+              </Card.Header>
               <Card.Body>
-                <ProgressBar animated now={45} />
                 <Autocomplete
                   onLoad={(autocomplete) => setautoCompleteSource(autocomplete)}
                   onPlaceChanged={() => {
@@ -195,7 +197,7 @@ const RouteRecommender = () => {
                     }
                   }}
                 >
-                  <InputGroup className="mt-4 mb-1 input_source">
+                  <InputGroup className="mt-2 mb-1 input_source">
                     <InputGroup.Prepend>
                       <InputGroup.Text id="source_input">
                         Source
@@ -291,6 +293,22 @@ const RouteRecommender = () => {
                   size="md"
                 >
                   Submit
+                </Button>
+              </Card.Body>
+            </Card>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">Your Journey</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <ProgressBar animated now={45} />
+                <Button
+                  onClick={() => {}}
+                  className="btn-fill mt-3"
+                  variant="primary"
+                  size="md"
+                >
+                  Start Journey !
                 </Button>
               </Card.Body>
             </Card>
