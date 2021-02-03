@@ -62,14 +62,6 @@ for (let i = 0; i < xcoords.length - 1; i++) {
   }
 }
 
-const colors = {
-  1: "#900d0b",
-  2: "#ed0202",
-  3: "#ec9704",
-  4: "#85d511",
-  5: "#1d9f32",
-};
-
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
 const RouteRecommender = () => {
