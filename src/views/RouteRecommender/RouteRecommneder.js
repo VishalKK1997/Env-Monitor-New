@@ -39,7 +39,7 @@ import {
 const libraries = ["places"];
 const mapContainerStyle = {
   width: "100%",
-  height: "83vh",
+  height: "86vh",
   borderRadius: "10px",
 };
 const center = {
@@ -71,6 +71,9 @@ const RouteRecommender = () => {
   const [goValue, setgoValue] = useState(false);
   const [goDemoValue, setgoDemoValue] = useState(false);
   const [alphaValue, setAlphaValue] = useState(0);
+  const [shortestRouteCheck, setShortestRouteCheck] = useState(false);
+  const [optimalRouteCheck, setOptimalRouteCheck] = useState(false);
+  const [safestRouteCheck, setSafestRouteCheck] = useState(false);
   const [response, setResponse] = useState(null);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -154,13 +157,13 @@ const RouteRecommender = () => {
                 <Polyline path={pathwithAlpha} options={pathwithAlphaOptions} />
               )}
 
-              {goDemoValue && !goValue && (
+              {(goDemoValue || safestRouteCheck) && (
                 <Polyline path={path1} options={path1Options} />
               )}
-              {goDemoValue && !goValue && (
+              {(goDemoValue || optimalRouteCheck) && (
                 <Polyline path={path2} options={path2Options} />
               )}
-              {goDemoValue && !goValue && (
+              {(goDemoValue || shortestRouteCheck) && (
                 <Polyline path={path3} options={path3Options} />
               )}
             </GoogleMap>
@@ -275,6 +278,63 @@ const RouteRecommender = () => {
                       className="input_checkbox"
                     />
                     <span className="span_checkbox">Go</span>
+                  </div>
+                </div>
+
+                <div className="div_checkbox">
+                  <div className="go_checkbox">
+                    <input
+                      value={shortestRouteCheck}
+                      onClick={() => setShortestRouteCheck((val) => !val)}
+                      type="checkbox"
+                      className="input_checkbox"
+                    />
+                    <span
+                      style={{
+                        backgroundColor: "#ff3700",
+                        width: "35px",
+                        height: "13px",
+                        display: "inline-block",
+                        marginRight: "4px",
+                      }}
+                    ></span>
+                    <span className="span_checkbox">Shortest</span>
+                  </div>
+                  <div className="go_checkbox">
+                    <input
+                      value={optimalRouteCheck}
+                      onClick={() => setOptimalRouteCheck((val) => !val)}
+                      type="checkbox"
+                      className="input_checkbox"
+                    />
+                    <span
+                      style={{
+                        backgroundColor: "#00b6ff",
+                        width: "35px",
+                        height: "13px",
+                        display: "inline-block",
+                        marginRight: "4px",
+                      }}
+                    ></span>
+                    <span className="span_checkbox">Optimal </span>
+                  </div>
+                  <div className="go_checkbox">
+                    <input
+                      value={safestRouteCheck}
+                      onClick={() => setSafestRouteCheck((val) => !val)}
+                      type="checkbox"
+                      className="input_checkbox"
+                    />
+                    <span
+                      style={{
+                        backgroundColor: "#ffaa00",
+                        width: "35px",
+                        height: "13px",
+                        display: "inline-block",
+                        marginRight: "4px",
+                      }}
+                    ></span>
+                    <span className="span_checkbox">Safest</span>
                   </div>
                 </div>
 

@@ -47,6 +47,20 @@ const options = {
         ticks: {
           beginAtZero: true,
         },
+        scaleLabel: {
+          display: true,
+          labelString: "AQI Count",
+          fontSize: 16,
+        },
+      },
+    ],
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "Days",
+          fontSize: 16,
+        },
       },
     ],
   },

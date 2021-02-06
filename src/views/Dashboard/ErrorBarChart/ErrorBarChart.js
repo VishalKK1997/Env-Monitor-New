@@ -36,6 +36,20 @@ const options = {
         ticks: {
           beginAtZero: true,
         },
+        scaleLabel: {
+          display: true,
+          labelString: "Accuracy Count",
+          fontSize: 16,
+        },
+      },
+    ],
+    xAxes: [
+      {
+        scaleLabel: {
+          display: true,
+          labelString: "Time Zone",
+          fontSize: 16,
+        },
       },
     ],
   },
