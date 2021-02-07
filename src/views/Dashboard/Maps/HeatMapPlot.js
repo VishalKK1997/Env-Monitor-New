@@ -27,7 +27,7 @@ function shuffle(array) {
 
 // Grid Builder function. Grid locations are constant. Not fetched from Network.
 function buildGrid() {
-  const xcoords = [23.534924, 23.5426365, 23.550349, 23.5580615, 23.565774];
+  const xcoords = [23.565774, 23.5580615, 23.550349, 23.5426365, 23.534924];
   const ycoords = [87.269568, 87.28258925, 87.2956105, 87.30863175, 87.321653];
   let geodata = [];
   for (let i = 0; i < xcoords.length - 1; i++) {
@@ -43,21 +43,13 @@ function buildGrid() {
 
 // Demo Data builder.
 function buildDemoData() {
-  let demoData = buildGrid();
-  const demoArray = [1, 2, 3, 4, 2, 2, 2, 2, 4, 5, 3, 2, 1, 2, 5, 3];
-  const predictionData = shuffle(demoArray);
-  demoData.forEach((obj, index) => {
-    obj["id"] = index;
-    obj["color"] = predictionData[index];
-  });
-  return demoData;
+  let demoArray = [1, 2, 3, 4, 2, 2, 2, 2, 4, 5, 3, 2, 1, 2, 5, 3];
+  let predictionData = shuffle(demoArray);
+  return predictionData;
 }
 
 // Network Request Simulator
-function simulateNetworkRequest(dateTime) {
-  let date = dateTime.split("T")[0];
-  let hour = dateTime.split("T")[1].split(":")[0];
-  const apiCallString = `gateway/prediction?date=${date}&hour=${hour}`;
+function simulateNetworkRequest(apiCallString) {
   console.log(apiCallString);
   return new Promise((resolve) => setTimeout(resolve(buildDemoData()), 2000));
 }
@@ -83,6 +75,13 @@ const getCurrentDateTime = () => {
   //2021-02-02T00:21
 };
 
+// API call string builder.
+function buildAPICallString(dateTime) {
+  let date = dateTime.split("T")[0];
+  let hour = dateTime.split("T")[1].split(":")[0];
+  return `gateway/prediction?date=${date}&hour=${hour}`;
+}
+
 const HeatMapPlot = () => {
   const [isLoading, setLoading] = useState(true);
   const [geoData, setGeoData] = useState(null);
@@ -90,11 +89,29 @@ const HeatMapPlot = () => {
 
   useEffect(() => {
     if (isLoading) {
-      simulateNetworkRequest(dateTime).then((data) => {
-        setLoading(false);
-        setGeoData(data);
-        document.getElementById("datetime").value = dateTime;
-      });
+      // After receiving endpoint, change the following simulateNetworkRequest to
+      // fetch(buildAPICallString(dateTime))
+      simulateNetworkRequest(buildAPICallString(dateTime))
+        // .then((res) => {
+        //   console.log(res);
+        //   return res.json();
+        // })
+        .then(
+          (predictionData) => {
+            let griddata = buildGrid();
+            griddata.forEach((obj, index) => {
+              obj["id"] = index;
+              obj["color"] = predictionData[index];
+            });
+            setGeoData(griddata);
+            setLoading(false);
+            document.getElementById("datetime").value = dateTime;
+          },
+          (error) => {
+            setLoading(false);
+            alert(error);
+          }
+        );
     }
   }, [isLoading]);
 
