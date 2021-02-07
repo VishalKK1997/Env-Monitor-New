@@ -22,16 +22,19 @@ function shuffle(array) {
   return array;
 }
 
-// Network call simulation
-function simulateNetworkRequest(id) {
-  const apiCallString = `gateway/gridwiseanalytics?grid_id=${id}`;
-  console.log(apiCallString);
+function buildDemoData() {
   let gridData = {
     daywise: shuffle([10, 30, 0, 40, 20]),
     weekwise: shuffle([20, 10, 50, 12, 8]),
     monthwise: shuffle([10, 30, 12, 40, 8]),
   };
-  return new Promise((resolve) => setTimeout(resolve(gridData), 2000));
+  return gridData;
+}
+
+// Network call simulation
+function simulateNetworkRequest(apiCallString) {
+  console.log(apiCallString);
+  return new Promise((resolve) => setTimeout(resolve(buildDemoData()), 2000));
 }
 
 const GridDataTable = (props) => {
@@ -41,10 +44,22 @@ const GridDataTable = (props) => {
 
   useEffect(() => {
     if (isLoading) {
-      simulateNetworkRequest(props.gridId).then((data) => {
-        setLoading(false);
-        setGridData(data);
-      });
+      // After receiving endpoint, change the following simulateNetworkRequest to
+      // fetch(`endpointHost/endpoint?grid_id=${props.gridId}`)
+      simulateNetworkRequest(
+        `gateway/gridwiseanalytics?grid_id=${props.gridId}`
+      )
+        // .then(res => res.json())
+        .then(
+          (data) => {
+            setGridData(data);
+            setLoading(false);
+          },
+          (error) => {
+            setLoading(false);
+            alert(error);
+          }
+        );
     }
   }, [isLoading]);
 
@@ -55,7 +70,7 @@ const GridDataTable = (props) => {
       <Table bordered>
         <thead>
           <tr>
-            <th>#</th>
+            <th>#{props.gridId}</th>
             <th>1</th>
             <th>2</th>
             <th>3</th>
