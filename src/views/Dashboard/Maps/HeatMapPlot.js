@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Table } from "react-bootstrap";
 import MapComponent from "./MapComponent";
 
 import hotelData from "./HotelData";
+import colors from "./ClassColors";
 
 // Demo function. Can be removed.
 function shuffle(array) {
@@ -159,31 +160,15 @@ const HeatMapPlot = () => {
               <Row>
                 <Table bordered>
                   <thead>
-                    <tr>
-                      <td colSpan={5}>Legends</td>
-                    </tr>
+                    
                   </thead>
                   <tbody>
-                    <tr>
-                      <td style={{ backgroundColor: "#900d0b" }}></td>
-                      <td>1</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#ed0202" }}></td>
-                      <td>2</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#ec9704" }}></td>
-                      <td>3</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#85d511" }}></td>
-                      <td>4</td>
-                    </tr>
-                    <tr>
-                      <td style={{ backgroundColor: "#1d9f32" }}></td>
-                      <td>5</td>
-                    </tr>
+                    {Object.keys(colors).map((aqiClass, index) => (
+                      <tr key={`Legend${index}`}>
+                        <td style={{ backgroundColor: colors[aqiClass] }}></td>
+                        <td>{aqiClass}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
               </Row>
