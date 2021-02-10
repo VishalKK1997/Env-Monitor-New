@@ -3,17 +3,15 @@ import React, { useState } from "react";
 import { Rectangle, InfoWindow } from "@react-google-maps/api";
 
 import GridDataTable from "./GridDataTable";
+import colors from "./ClassColors";
 
 const RectangleWithInfoWindow = (props) => {
   const [isClicked, setClicked] = useState(false);
 
-  const colors = {
-    1: "#900d0b",
-    2: "#ed0202",
-    3: "#ec9704",
-    4: "#85d511",
-    5: "#1d9f32",
+  const colorMapper = (numeric) => {
+    return Object.values(colors)[numeric - 1];
   };
+
   return (
     <div>
       <Rectangle
@@ -28,10 +26,10 @@ const RectangleWithInfoWindow = (props) => {
           west: props.point.sw.lng,
         }}
         options={{
-          strokeColor: colors[props.point.color],
+          strokeColor: colorMapper(props.point.color),
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: colors[props.point.color],
+          fillColor: colorMapper(props.point.color),
           fillOpacity: 0.35,
         }}
       />
