@@ -25,6 +25,7 @@ import Upgrade from "views/Upgrade.js";
 import RouteRecommender from "views/RouteRecommender/RouteRecommneder";
 import Dashboard from "views/Dashboard/Dashboard";
 import Performance from "views/Performance/Performance";
+import AnalyticsCard from "views/Analytics/AnalyticsCard";
 
 const dashboardRoutes = [
   // {
@@ -84,13 +85,13 @@ const dashboardRoutes = [
   //   component: Notifications,
   //   layout: "/admin",
   // },
-  // {
-  //   path: "/performance",
-  //   name: "Performance",
-  //   icon: "nc-icon nc-paper-2",
-  //   component: Performance,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/analytics",
+    name: "Analytics",
+    icon: "nc-icon nc-paper-2",
+    component: AnalyticsCard,
+    layout: "/admin",
+  },
 ];
 
 export default dashboardRoutes;

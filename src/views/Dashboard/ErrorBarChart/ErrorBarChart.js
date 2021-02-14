@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import * as Zoom from "chartjs-plugin-zoom";
-import { colors } from "constants/AQIcolors";
+// import { colors } from "views/Analytics/GroupedBarChart/node_modules/constants/AQIcolors";
 import "chartjs-plugin-error-bars";
 
 const data = {

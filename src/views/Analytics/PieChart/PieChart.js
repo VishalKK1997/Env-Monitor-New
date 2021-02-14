@@ -1,5 +1,6 @@
 import colors from "constants/AQIcolors";
 import React, { useState } from "react";
+import { Card } from "react-bootstrap";
 import { Pie } from "react-chartjs-2";
 import formatDate from "utils/formatDate";
 import "./PieChart.css";
@@ -62,18 +63,30 @@ const options = {
 const PieChart = () => {
   const [date, setdate] = useState(formatDate(new Date()));
   return (
-    <div>
-      <div className="date_input">
-        <label htmlFor="date-input">Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setdate(formatDate(e.target.value))}
-          name="date-input"
-        />
-      </div>
-      <Pie data={data} options={options} width={150} height={150} />
-    </div>
+    <Card style={{ height: "100%" }}>
+      <Card.Header>
+        <Card.Title as="h4">Prediction Data</Card.Title>
+        <p className="card-category">24 hrs performance</p>
+      </Card.Header>
+      <Card.Body>
+        <div
+          className="ct-chart ct-perfect-fourth"
+          // style={{ width: "100%", height: "100%" }}
+          id="chartPreferences"
+        >
+          <div className="date_input">
+            <label htmlFor="date-input">Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setdate(formatDate(e.target.value))}
+              name="date-input"
+            />
+          </div>
+          <Pie data={data} options={options} width={150} height={150} />
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

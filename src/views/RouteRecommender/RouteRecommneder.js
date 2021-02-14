@@ -141,217 +141,225 @@ const RouteRecommender = () => {
   };
 
   return (
-    <div>
-      <Container fluid="md">
-        <Row>
-          <Col md={7}>
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              zoom={15}
-              center={center}
-            >
-              {currentpos && <Marker position={currentpos} />}
-              {destination && <Marker position={destination} />}
+    <Card className="root">
+      <Card.Header>
+        <Card.Title as="h4">Route Recommendation</Card.Title>
+      </Card.Header>
+      <Card.Body>
+        <Container fluid="md">
+          <Row>
+            <Col md={7}>
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                zoom={15}
+                center={center}
+              >
+                {currentpos && <Marker position={currentpos} />}
+                {destination && <Marker position={destination} />}
 
-              {goValue && !goDemoValue && (
-                <Polyline path={pathwithAlpha} options={pathwithAlphaOptions} />
-              )}
-
-              {(goDemoValue || safestRouteCheck) && (
-                <Polyline path={path1} options={path1Options} />
-              )}
-              {(goDemoValue || optimalRouteCheck) && (
-                <Polyline path={path2} options={path2Options} />
-              )}
-              {(goDemoValue || shortestRouteCheck) && (
-                <Polyline path={path3} options={path3Options} />
-              )}
-            </GoogleMap>
-          </Col>
-
-          <Col md={5}>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Route Recommendation</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Autocomplete
-                  onLoad={(autocomplete) => setautoCompleteSource(autocomplete)}
-                  onPlaceChanged={() => {
-                    if (autoCompleteSource !== null) {
-                      setCurrentpos({
-                        lat: autoCompleteSource
-                          .getPlace()
-                          .geometry.location.lat(),
-                        lng: autoCompleteSource
-                          .getPlace()
-                          .geometry.location.lng(),
-                      });
-                    } else {
-                      console.log("Autocomplete is not loaded yet!");
-                    }
-                  }}
-                >
-                  <InputGroup className="mt-2 mb-1 input_source">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="source_input">
-                        Source
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-
-                    <FormControl
-                      style={{ width: "330px" }}
-                      disabled={checkboxVal}
-                      ref={destRef}
-                      id="source_input"
-                      aria-describedby="source_input"
-                    />
-                  </InputGroup>
-                </Autocomplete>
-                <div>
-                  <input
-                    value={checkboxVal}
-                    onClick={() => setCheckboxVal((val) => !val)}
-                    type="checkbox"
-                    className="input_checkbox"
+                {goValue && !goDemoValue && (
+                  <Polyline
+                    path={pathwithAlpha}
+                    options={pathwithAlphaOptions}
                   />
-                  <span className="span_checkbox">Set as current location</span>
-                </div>
+                )}
 
-                <Autocomplete
-                  onLoad={(autocomplete) => setautoCompleteDest(autocomplete)}
-                  onPlaceChanged={() => {
-                    if (autoCompleteDest !== null) {
-                      setDestination({
-                        lat: autoCompleteDest
-                          .getPlace()
-                          .geometry.location.lat(),
-                        lng: autoCompleteDest
-                          .getPlace()
-                          .geometry.location.lng(),
-                      });
-                    } else {
-                      console.log("Autocomplete is not loaded yet!");
+                {(goDemoValue || safestRouteCheck) && (
+                  <Polyline path={path1} options={path1Options} />
+                )}
+                {(goDemoValue || optimalRouteCheck) && (
+                  <Polyline path={path2} options={path2Options} />
+                )}
+                {(goDemoValue || shortestRouteCheck) && (
+                  <Polyline path={path3} options={path3Options} />
+                )}
+              </GoogleMap>
+            </Col>
+
+            <Col md={5}>
+              <Card>
+                <Card.Body>
+                  <Autocomplete
+                    onLoad={(autocomplete) =>
+                      setautoCompleteSource(autocomplete)
                     }
-                  }}
-                >
-                  <InputGroup className="mt-4 mb-4 input_destination">
-                    <InputGroup.Prepend>
-                      <InputGroup.Text id="destination_input">
-                        Destination
-                      </InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl
-                      ref={destRef}
-                      id="destination_input"
-                      aria-describedby="destination_input"
-                    />
-                  </InputGroup>
-                </Autocomplete>
+                    onPlaceChanged={() => {
+                      if (autoCompleteSource !== null) {
+                        setCurrentpos({
+                          lat: autoCompleteSource
+                            .getPlace()
+                            .geometry.location.lat(),
+                          lng: autoCompleteSource
+                            .getPlace()
+                            .geometry.location.lng(),
+                        });
+                      } else {
+                        console.log("Autocomplete is not loaded yet!");
+                      }
+                    }}
+                  >
+                    <InputGroup className="mt-2 mb-1 input_source">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="source_input">
+                          Source
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
 
-                <Form.Group className="mb-4" controlId="formBasicRange">
-                  <Form.Label>Alpha value</Form.Label>
-                  <RangeSlider
-                    min={0}
-                    max={10}
-                    value={alphaValue}
-                    tooltipLabel={(currentValue) => `${currentValue / 10}`}
-                    tooltip="auto"
-                    onChange={(e) => setAlphaValue(e.target.value)}
-                  />
-                </Form.Group>
-                <div className="div_checkbox">
-                  <div className="go_demo_checkbox">
+                      <FormControl
+                        disabled={checkboxVal}
+                        ref={destRef}
+                        id="source_input"
+                        aria-describedby="source_input"
+                      />
+                    </InputGroup>
+                  </Autocomplete>
+                  <div>
                     <input
-                      value={goDemoValue}
-                      onClick={() => setgoDemoValue((val) => !val)}
+                      value={checkboxVal}
+                      onClick={() => setCheckboxVal((val) => !val)}
                       type="checkbox"
                       className="input_checkbox"
                     />
-                    <span className="span_checkbox">Go Demo</span>
+                    <span className="span_checkbox">
+                      Set as current location
+                    </span>
                   </div>
-                  <div className="go_checkbox">
-                    <input
-                      value={goValue}
-                      onClick={() => setgoValue((val) => !val)}
-                      type="checkbox"
-                      className="input_checkbox"
-                    />
-                    <span className="span_checkbox">Go</span>
-                  </div>
-                </div>
 
-                <div className="div_checkbox">
-                  <div className="go_checkbox">
-                    <input
-                      value={shortestRouteCheck}
-                      onClick={() => setShortestRouteCheck((val) => !val)}
-                      type="checkbox"
-                      className="input_checkbox"
-                    />
-                    <span
-                      style={{
-                        backgroundColor: "#ff3700",
-                        width: "35px",
-                        height: "13px",
-                        display: "inline-block",
-                        marginRight: "4px",
-                      }}
-                    ></span>
-                    <span className="span_checkbox">Shortest</span>
-                  </div>
-                  <div className="go_checkbox">
-                    <input
-                      value={optimalRouteCheck}
-                      onClick={() => setOptimalRouteCheck((val) => !val)}
-                      type="checkbox"
-                      className="input_checkbox"
-                    />
-                    <span
-                      style={{
-                        backgroundColor: "#00b6ff",
-                        width: "35px",
-                        height: "13px",
-                        display: "inline-block",
-                        marginRight: "4px",
-                      }}
-                    ></span>
-                    <span className="span_checkbox">Optimal </span>
-                  </div>
-                  <div className="go_checkbox">
-                    <input
-                      value={safestRouteCheck}
-                      onClick={() => setSafestRouteCheck((val) => !val)}
-                      type="checkbox"
-                      className="input_checkbox"
-                    />
-                    <span
-                      style={{
-                        backgroundColor: "#ffaa00",
-                        width: "35px",
-                        height: "13px",
-                        display: "inline-block",
-                        marginRight: "4px",
-                      }}
-                    ></span>
-                    <span className="span_checkbox">Safest</span>
-                  </div>
-                </div>
+                  <Autocomplete
+                    onLoad={(autocomplete) => setautoCompleteDest(autocomplete)}
+                    onPlaceChanged={() => {
+                      if (autoCompleteDest !== null) {
+                        setDestination({
+                          lat: autoCompleteDest
+                            .getPlace()
+                            .geometry.location.lat(),
+                          lng: autoCompleteDest
+                            .getPlace()
+                            .geometry.location.lng(),
+                        });
+                      } else {
+                        console.log("Autocomplete is not loaded yet!");
+                      }
+                    }}
+                  >
+                    <InputGroup className="mt-4 mb-4 input_destination">
+                      <InputGroup.Prepend>
+                        <InputGroup.Text id="destination_input">
+                          Destination
+                        </InputGroup.Text>
+                      </InputGroup.Prepend>
+                      <FormControl
+                        ref={destRef}
+                        id="destination_input"
+                        aria-describedby="destination_input"
+                      />
+                    </InputGroup>
+                  </Autocomplete>
 
-                <Button
-                  onClick={handleSubmit}
-                  className="btn-fill mt-3"
-                  variant="primary"
-                  size="md"
-                >
-                  Submit
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+                  <Form.Group className="mb-4" controlId="formBasicRange">
+                    <Form.Label>Alpha value</Form.Label>
+                    <RangeSlider
+                      min={0}
+                      max={10}
+                      value={alphaValue}
+                      tooltipLabel={(currentValue) => `${currentValue / 10}`}
+                      tooltip="auto"
+                      onChange={(e) => setAlphaValue(e.target.value)}
+                    />
+                  </Form.Group>
+                  <div className="div_checkbox">
+                    <div className="go_demo_checkbox">
+                      <input
+                        value={goDemoValue}
+                        onClick={() => setgoDemoValue((val) => !val)}
+                        type="checkbox"
+                        className="input_checkbox"
+                      />
+                      <span className="span_checkbox">Go Demo</span>
+                    </div>
+                    <div className="go_checkbox">
+                      <input
+                        value={goValue}
+                        onClick={() => setgoValue((val) => !val)}
+                        type="checkbox"
+                        className="input_checkbox"
+                      />
+                      <span className="span_checkbox">Go</span>
+                    </div>
+                  </div>
+
+                  <div className="div_checkbox">
+                    <div className="go_checkbox">
+                      <input
+                        value={shortestRouteCheck}
+                        onClick={() => setShortestRouteCheck((val) => !val)}
+                        type="checkbox"
+                        className="input_checkbox"
+                      />
+                      <span
+                        style={{
+                          backgroundColor: "#ff3700",
+                          width: "35px",
+                          height: "13px",
+                          display: "inline-block",
+                          marginRight: "4px",
+                        }}
+                      ></span>
+                      <span className="span_checkbox">Shortest</span>
+                    </div>
+                    <div className="go_checkbox">
+                      <input
+                        value={optimalRouteCheck}
+                        onClick={() => setOptimalRouteCheck((val) => !val)}
+                        type="checkbox"
+                        className="input_checkbox"
+                      />
+                      <span
+                        style={{
+                          backgroundColor: "#00b6ff",
+                          width: "35px",
+                          height: "13px",
+                          display: "inline-block",
+                          marginRight: "4px",
+                        }}
+                      ></span>
+                      <span className="span_checkbox">Optimal </span>
+                    </div>
+                    <div className="go_checkbox">
+                      <input
+                        value={safestRouteCheck}
+                        onClick={() => setSafestRouteCheck((val) => !val)}
+                        type="checkbox"
+                        className="input_checkbox"
+                      />
+                      <span
+                        style={{
+                          backgroundColor: "#ffaa00",
+                          width: "35px",
+                          height: "13px",
+                          display: "inline-block",
+                          marginRight: "4px",
+                        }}
+                      ></span>
+                      <span className="span_checkbox">Safest</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={handleSubmit}
+                    className="btn-fill mt-3"
+                    variant="primary"
+                    size="md"
+                  >
+                    Submit
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </Card.Body>
+    </Card>
   );
 };
 

@@ -9,23 +9,24 @@ import {
 
 import RectangleWithInfoWindow from "./RectangleWithInfoWindow";
 import MarkerWithInfoWindow from "./MarkerWithInfoWindow";
+import POICard from "./POICard";
+
+import styles from "../../../styles/DashboardHeatMapPlotStyles";
+import { DashboardHeatmapContext } from "./HeatMapPlot";
 
 import hotelIcon from "./motel-2.png";
 
 const libraries = ["places"];
-
-const mapContainerStyle = {
-  width: "100%",
-  height: "75vh",
-  borderRadius: "10px",
-  margin: "15px auto 15px auto",
-};
 
 const MapComponent = (props) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
+
+  const { gridData, poiData, predictionData } = React.useContext(
+    DashboardHeatmapContext
+  );
 
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [center, setCenter] = useState(props.center);
@@ -36,7 +37,6 @@ const MapComponent = (props) => {
   };
 
   const onPlacesChanged = () => {
-    console.log(searchBox.getPlaces());
     const selectedPlace_ = searchBox.getPlaces()[0];
     setSelectedPlace(selectedPlace_);
     setCenter(selectedPlace_.geometry.location);
@@ -56,18 +56,7 @@ const MapComponent = (props) => {
               <input
                 type="text"
                 placeholder="Enter a place to search"
-                style={{
-                  boxSizing: `border-box`,
-                  border: `1px solid transparent`,
-                  width: `100%`,
-                  height: `40px`,
-                  padding: `0 12px`,
-                  borderRadius: `10px`,
-                  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                  fontSize: `14px`,
-                  outline: `none`,
-                  textOverflow: `ellipses`,
-                }}
+                style={styles.searchPlaceInputStyle}
               />
             </StandaloneSearchBox>
           )}
@@ -80,29 +69,27 @@ const MapComponent = (props) => {
           ) : (
             <GoogleMap
               id="dashboard-heatmap"
-              mapContainerStyle={mapContainerStyle}
-              zoom={14}
+              mapContainerStyle={styles.mapContainerStyle}
+              zoom={14.3}
               center={center}
             >
-              {props.geodata &&
-                props.geodata.map((point, idx) => (
+              {gridData &&
+                gridData.map((point, idx) => (
                   <RectangleWithInfoWindow
                     key={"Rectagle" + idx}
-                    point={point}
+                    point={{
+                      ...point,
+                      prediction: predictionData[point.id],
+                    }}
                   />
                 ))}
 
-              {props.hotelData &&
-                props.hotelData.map((hotel, idx) => (
+              {poiData &&
+                poiData.map((poi, idx) => (
                   <MarkerWithInfoWindow
                     key={"Marker" + idx}
-                    position={hotel.location}
-                    info={
-                      <div>
-                        <h4>{hotel.name}</h4>
-                        <p>Average Daily price: {hotel.price}</p>
-                      </div>
-                    }
+                    position={poi.location}
+                    info={<POICard poi={poi} style={{ fontWeight: "500" }} />}
                     icon={hotelIcon}
                   />
                 ))}

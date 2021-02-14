@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
 
+import { DashboardHeatmapContext } from "./HeatMapPlot";
+
 // Demo function. Can be removed.
 function shuffle(array) {
   var currentIndex = array.length,
@@ -42,12 +44,14 @@ const GridDataTable = (props) => {
 
   const [gridData, setGridData] = useState(null);
 
+  const { dateTime } = React.useContext(DashboardHeatmapContext);
+
   useEffect(() => {
     if (isLoading) {
       // After receiving endpoint, change the following simulateNetworkRequest to
       // fetch(`endpointHost/endpoint?grid_id=${props.gridId}`)
       simulateNetworkRequest(
-        `gateway/gridwiseanalytics?grid_id=${props.gridId}`
+        `gateway/gridwiseanalytics?grid_id=${props.gridId}&dateTime=${dateTime}`
       )
         // .then(res => res.json())
         .then(

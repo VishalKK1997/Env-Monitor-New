@@ -2,15 +2,16 @@ import React, { useState } from "react";
 
 import { Rectangle, InfoWindow } from "@react-google-maps/api";
 
+import AQIcolors from "../../../constants/AQIcolors";
+
 import GridDataTable from "./GridDataTable";
-import colors from "./ClassColors";
+
+function mapColor(aqi) {
+  return Object.values(AQIcolors)[aqi - 1].color;
+}
 
 const RectangleWithInfoWindow = (props) => {
   const [isClicked, setClicked] = useState(false);
-
-  const colorMapper = (numeric) => {
-    return Object.values(colors)[numeric - 1];
-  };
 
   return (
     <div>
@@ -26,10 +27,10 @@ const RectangleWithInfoWindow = (props) => {
           west: props.point.sw.lng,
         }}
         options={{
-          strokeColor: colorMapper(props.point.color),
+          strokeColor: mapColor(props.point.prediction),
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: colorMapper(props.point.color),
+          fillColor: mapColor(props.point.prediction),
           fillOpacity: 0.35,
         }}
       />
