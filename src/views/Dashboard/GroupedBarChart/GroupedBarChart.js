@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import * as Zoom from "chartjs-plugin-zoom";
 import colors from "constants/AQIcolors";
+import { Card } from "react-bootstrap";
+import formatDate from "utils/formatDate";
+import "./GroupedBarChart.css";
+import BarChartDropdown from "./BarChartDropdown/BarChartDropdown";
 
 const data = {
   labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
@@ -87,10 +91,43 @@ const options = {
 
 const GroupedBarChart = () => {
   const [barData] = useState(data);
+  const [date, setdate] = useState(formatDate(new Date()));
+  const [gridValue, setgridValue] = useState("All");
+
   return (
-    <div style={{ margin: "30px" }}>
-      <Bar data={barData} options={options} />
-    </div>
+    <Card style={{ height: "100%" }}>
+      <Card.Header>
+        <div className="root_div">
+          <div className="card_headers">
+            <Card.Title as="h4">Prediction Data</Card.Title>
+            <span className="card-category">Last 7 days performance</span>
+          </div>
+          <div className="date_input">
+            <label htmlFor="date-input">Date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setdate(formatDate(e.target.value))}
+              name="date-input"
+            />
+          </div>
+          <div className="grid_select_dropdown">
+            <label className="grid_select_dropdown_label" htmlFor="grid-select">
+              Select Grid
+            </label>
+            <BarChartDropdown
+              value={gridValue}
+              onChangeGridValue={setgridValue}
+            />
+          </div>
+        </div>
+      </Card.Header>
+      <Card.Body>
+        <div style={{ margin: "30px" }}>
+          <Bar data={barData} options={options} />
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

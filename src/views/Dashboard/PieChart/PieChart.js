@@ -1,6 +1,8 @@
 import colors from "constants/AQIcolors";
-import React from "react";
+import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
+import formatDate from "utils/formatDate";
+import "./PieChart.css";
 
 const data = {
   labels: [
@@ -37,18 +39,18 @@ const options = {
   legend: {
     display: true,
     position: "top",
-    legendCallback: function (chart) {
-      // Return the HTML string here.
-      console.log(chart);
-      return [
-        <ul>
-          <li>z</li>
-          <li>zzzz</li>
-          <li>ppp</li>
-          <li>adasda</li>
-        </ul>,
-      ];
-    },
+    // legendCallback: function (chart) {
+    //   // Return the HTML string here.
+    //   console.log(chart);
+    //   return [
+    //     <ul>
+    //       <li>z</li>
+    //       <li>zzzz</li>
+    //       <li>ppp</li>
+    //       <li>adasda</li>
+    //     </ul>,
+    //   ];
+    // },
   },
   elements: {
     arc: {
@@ -58,9 +60,19 @@ const options = {
 };
 
 const PieChart = () => {
+  const [date, setdate] = useState(formatDate(new Date()));
   return (
     <div>
-      <Pie data={data} options={options} width={250} height={250} />
+      <div className="date_input">
+        <label htmlFor="date-input">Date</label>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setdate(formatDate(e.target.value))}
+          name="date-input"
+        />
+      </div>
+      <Pie data={data} options={options} width={150} height={150} />
     </div>
   );
 };

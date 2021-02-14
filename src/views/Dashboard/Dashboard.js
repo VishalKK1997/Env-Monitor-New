@@ -19,6 +19,7 @@ import HeatMapPlot from "./Maps/HeatMapPlot";
 import ErrorBarChart from "./ErrorBarChart/ErrorBarChart";
 import GroupedBarChart from "./GroupedBarChart/GroupedBarChart";
 import PieChart from "./PieChart/PieChart";
+import formatDate from "utils/formatDate";
 
 function Dashboard() {
   return (
@@ -138,19 +139,10 @@ function Dashboard() {
         </Row>
         <Row>
           <Col md="9">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Prediction Data</Card.Title>
-                <span className="card-category">Last 7 days performance</span>
-                <input type="date" style={{ marginLeft: "5%" }} />
-              </Card.Header>
-              <Card.Body>
-                <GroupedBarChart />
-              </Card.Body>
-            </Card>
+            <GroupedBarChart />
           </Col>
           <Col md="3">
-            <Card>
+            <Card style={{ height: "100%" }}>
               <Card.Header>
                 <Card.Title as="h4">Prediction Data</Card.Title>
                 <p className="card-category">24 hrs performance</p>
@@ -158,7 +150,7 @@ function Dashboard() {
               <Card.Body>
                 <div
                   className="ct-chart ct-perfect-fourth"
-                  // style={{ width: "100%", height: "100%" }}
+                  // style={{ width: "100%", height: "10%" }}
                   id="chartPreferences"
                 >
                   <PieChart />

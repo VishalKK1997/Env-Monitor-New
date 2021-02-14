@@ -348,22 +348,6 @@ const RouteRecommender = () => {
                 </Button>
               </Card.Body>
             </Card>
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Your Journey</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <ProgressBar animated now={45} />
-                <Button
-                  onClick={() => {}}
-                  className="btn-fill mt-3"
-                  variant="primary"
-                  size="md"
-                >
-                  Start Journey !
-                </Button>
-              </Card.Body>
-            </Card>
           </Col>
         </Row>
       </Container>
