@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Button, Table } from "react-bootstrap";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import MapComponent from "./MapComponent";
+import MapLegendCard from "./MapLegendCard";
+import POIListCard from "./POIListCard";
 
-import hotelData from "./HotelData";
-import colors from "./ClassColors";
+import poiData from "../../../constants/POIData";
+import buildGrid from "../../../constants/GridBuilder";
+import styles from "../../../styles/DashboardHeatMapPlotStyles";
+
+const DashboardHeatmapContext = React.createContext();
 
 // Demo function. Can be removed.
 function shuffle(array) {
@@ -26,22 +31,6 @@ function shuffle(array) {
   return array;
 }
 
-// Grid Builder function. Grid locations are constant. Not fetched from Network.
-function buildGrid() {
-  const xcoords = [23.565774, 23.5580615, 23.550349, 23.5426365, 23.534924];
-  const ycoords = [87.269568, 87.28258925, 87.2956105, 87.30863175, 87.321653];
-  let geodata = [];
-  for (let i = 0; i < xcoords.length - 1; i++) {
-    for (let j = 0; j < ycoords.length - 1; j++) {
-      geodata.push({
-        sw: { lat: xcoords[i], lng: ycoords[j] },
-        ne: { lat: xcoords[i + 1], lng: ycoords[j + 1] },
-      });
-    }
-  }
-  return geodata;
-}
-
 // Demo Data builder.
 function buildDemoData() {
   let demoArray = [1, 2, 3, 4, 2, 2, 2, 2, 4, 5, 3, 2, 1, 2, 5, 3];
@@ -56,7 +45,7 @@ function simulateNetworkRequest(apiCallString) {
 }
 
 // Get Current Date Time for first load.
-const getCurrentDateTime = () => {
+function getCurrentDateTime() {
   let currentDateTime = new Date();
   return (
     currentDateTime.getFullYear() +
@@ -73,8 +62,8 @@ const getCurrentDateTime = () => {
     (currentDateTime.getMinutes() < 10 ? "0" : "") +
     currentDateTime.getMinutes()
   );
-  //2021-02-02T00:21
-};
+  // Format: 2021-02-02T00:21
+}
 
 // API call string builder.
 function buildAPICallString(dateTime) {
@@ -85,8 +74,9 @@ function buildAPICallString(dateTime) {
 
 const HeatMapPlot = () => {
   const [isLoading, setLoading] = useState(true);
-  const [geoData, setGeoData] = useState(null);
+  const [gridData, setGridData] = useState(null);
   const [dateTime, setDateTime] = useState(getCurrentDateTime());
+  const [predictionData, setPredictionData] = useState(null);
 
   useEffect(() => {
     if (isLoading) {
@@ -99,12 +89,8 @@ const HeatMapPlot = () => {
         // })
         .then(
           (predictionData) => {
-            let griddata = buildGrid();
-            griddata.forEach((obj, index) => {
-              obj["id"] = index;
-              obj["color"] = predictionData[index];
-            });
-            setGeoData(griddata);
+            setPredictionData(predictionData);
+            setGridData(buildGrid());
             setLoading(false);
             document.getElementById("datetime").value = dateTime;
           },
@@ -118,8 +104,12 @@ const HeatMapPlot = () => {
 
   const handleClick = () => {
     const inputData = document.getElementById("datetime").value;
-    setDateTime(inputData);
-    setLoading(true);
+    if (Date.parse(inputData) > new Date()) {
+      alert("Choosen Date Time cannot be in future.");
+    } else {
+      setDateTime(inputData);
+      setLoading(true);
+    }
   };
 
   return (
@@ -132,47 +122,57 @@ const HeatMapPlot = () => {
         <Container>
           <Row>
             <Col>
-              {!isLoading && geoData ? (
-                <MapComponent
-                  center={{
-                    lat: 23.550399503999397,
-                    lng: 87.2954336733082,
-                  }}
-                  geodata={geoData}
-                  hotelData={hotelData}
-                />
+              {!isLoading && gridData && predictionData ? (
+                <DashboardHeatmapContext.Provider
+                  value={{ gridData, poiData, dateTime, predictionData }}
+                >
+                  <MapComponent
+                    center={{
+                      lat: 23.550399503999397,
+                      lng: 87.2954336733082,
+                    }}
+                  />
+                </DashboardHeatmapContext.Provider>
               ) : (
                 "Loading Map..."
               )}
             </Col>
-            <Col xs={4}>
-              <label htmlFor="datetime">Date & Time</label>
-              <br />
-              <input type="datetime-local" id="datetime" name="datetime" />
-              <Button
-                variant="primary"
-                disabled={isLoading}
-                onClick={!isLoading ? handleClick : null}
-              >
-                {isLoading ? "Loading…" : "Submit"}
-              </Button>
-
+          </Row>
+          <Row>
+            <Col>
+              <MapLegendCard />
+            </Col>
+            <Col>
               <Row>
-                <Table bordered>
-                  <thead>
-                    
-                  </thead>
-                  <tbody>
-                    {Object.keys(colors).map((aqiClass, index) => (
-                      <tr key={`Legend${index}`}>
-                        <td style={{ backgroundColor: colors[aqiClass] }}></td>
-                        <td>{aqiClass}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                <label style={styles.fullWidthStyle} htmlFor="datetime">
+                  Date & Time
+                </label>
+                <input
+                  style={styles.fullWidthStyle}
+                  type="datetime-local"
+                  id="datetime"
+                  name="datetime"
+                />
+                <Button
+                  style={styles.dateSubmitButtonStyle}
+                  variant="primary"
+                  disabled={isLoading}
+                  onClick={!isLoading ? handleClick : null}
+                >
+                  {isLoading ? "Loading…" : "Submit"}
+                </Button>
               </Row>
             </Col>
+          </Row>
+
+          <Row>
+            {predictionData && poiData && (
+              <DashboardHeatmapContext.Provider
+                value={{ predictionData, poiData }}
+              >
+                <POIListCard />
+              </DashboardHeatmapContext.Provider>
+            )}
           </Row>
         </Container>
       </Card.Body>
@@ -181,3 +181,4 @@ const HeatMapPlot = () => {
 };
 
 export default HeatMapPlot;
+export { DashboardHeatmapContext as DashboardHeatmapContext };
