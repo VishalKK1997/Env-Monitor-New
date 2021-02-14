@@ -20,7 +20,7 @@ const libraries = ["places"];
 
 const MapComponent = (props) => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: "AIzaSyBEgAw6Zm1735tFtWPGKGcZ3OaVlzETJdM", //process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 
@@ -70,7 +70,7 @@ const MapComponent = (props) => {
             <GoogleMap
               id="dashboard-heatmap"
               mapContainerStyle={styles.mapContainerStyle}
-              zoom={14.3}
+              zoom={14}
               center={center}
             >
               {gridData &&

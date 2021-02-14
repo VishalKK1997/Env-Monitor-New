@@ -39,6 +39,16 @@ function simulateNetworkRequest(apiCallString) {
   return new Promise((resolve) => setTimeout(resolve(buildDemoData()), 2000));
 }
 
+// API call string builder.
+function buildAPICallString(dateTime, gridId) {
+  let date = dateTime.split("T")[0];
+  let hour = dateTime.split("T")[1].split(":")[0];
+  console.log(
+    `http://127.0.0.1:5000/pred_table_data?grid=${gridId}&date=${date}`
+  );
+  return `http://127.0.0.1:5000/pred_table_data?grid=${gridId}&date=${date}`;
+}
+
 const GridDataTable = (props) => {
   const [isLoading, setLoading] = useState(true);
 
@@ -50,12 +60,11 @@ const GridDataTable = (props) => {
     if (isLoading) {
       // After receiving endpoint, change the following simulateNetworkRequest to
       // fetch(`endpointHost/endpoint?grid_id=${props.gridId}`)
-      simulateNetworkRequest(
-        `gateway/gridwiseanalytics?grid_id=${props.gridId}&dateTime=${dateTime}`
-      )
-        // .then(res => res.json())
+      fetch(buildAPICallString(dateTime, props.gridId))
+        .then((res) => res.json())
         .then(
           (data) => {
+            console.log("data", data);
             setGridData(data);
             setLoading(false);
           },
@@ -85,19 +94,19 @@ const GridDataTable = (props) => {
         <tbody>
           <tr>
             <td>Day Wise</td>
-            {gridData.daywise.map((data, idx) => (
+            {gridData["daily"].map((data, idx) => (
               <td key={"DayData" + idx}>{data}%</td>
             ))}
           </tr>
           <tr>
             <td>Week Wise</td>
-            {gridData.weekwise.map((data, idx) => (
+            {gridData["weekly"].map((data, idx) => (
               <td key={"WeekData" + idx}>{data}%</td>
             ))}
           </tr>
           <tr>
             <td>Month Wise</td>
-            {gridData.monthwise.map((data, idx) => (
+            {gridData["monthly"].map((data, idx) => (
               <td key={"MonthData" + idx}>{data}%</td>
             ))}
           </tr>
