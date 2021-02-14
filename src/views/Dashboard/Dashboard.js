@@ -17,8 +17,7 @@ import {
 } from "react-bootstrap";
 import HeatMapPlot from "./Maps/HeatMapPlot";
 import ErrorBarChart from "./ErrorBarChart/ErrorBarChart";
-import GroupedBarChart from "./GroupedBarChart/GroupedBarChart";
-import PieChart from "./PieChart/PieChart";
+import AnalyticsCard from "../Analytics/AnalyticsCard";
 
 function Dashboard() {
   return (
@@ -137,35 +136,7 @@ function Dashboard() {
           </Col>
         </Row>
         <Row>
-          <Col md="9">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Prediction Data</Card.Title>
-                <span className="card-category">Last 7 days performance</span>
-                <input type="date" style={{ marginLeft: "5%" }} />
-              </Card.Header>
-              <Card.Body>
-                <GroupedBarChart />
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md="3">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Prediction Data</Card.Title>
-                <p className="card-category">24 hrs performance</p>
-              </Card.Header>
-              <Card.Body>
-                <div
-                  className="ct-chart ct-perfect-fourth"
-                  // style={{ width: "100%", height: "100%" }}
-                  id="chartPreferences"
-                >
-                  <PieChart />
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
+          <AnalyticsCard />
         </Row>
       </Container>
     </>

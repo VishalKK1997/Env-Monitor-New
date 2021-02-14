@@ -1,4 +1,4 @@
-import colors from "constants/AQIcolors";
+import colors from "../../../constants/AQIcolors";
 import React from "react";
 import { Pie } from "react-chartjs-2";
 
