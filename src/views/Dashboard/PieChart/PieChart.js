@@ -1,19 +1,31 @@
-import { colors } from "constants/AQIcolors";
+import colors from "constants/AQIcolors";
 import React from "react";
 import { Pie } from "react-chartjs-2";
 
 const data = {
-  labels: ["Best", "Good", "Moderate", "Bad", "Worst"],
+  labels: [
+    colors[0].title,
+    colors[1].title,
+    colors[2].title,
+    colors[3].title,
+    colors[4].title,
+  ],
   datasets: [
     {
       data: [300, 50, 100, 50, 25],
-      backgroundColor: [colors[5], colors[4], colors[3], colors[2], colors[1]],
+      backgroundColor: [
+        colors[0].color,
+        colors[1].color,
+        colors[2].color,
+        colors[3].color,
+        colors[4].color,
+      ],
       hoverBackgroundColor: [
-        colors[5],
-        colors[4],
-        colors[3],
-        colors[2],
-        colors[1],
+        colors[0].color,
+        colors[1].color,
+        colors[2].color,
+        colors[3].color,
+        colors[4].color,
       ],
     },
   ],

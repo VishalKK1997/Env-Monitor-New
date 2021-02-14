@@ -24,7 +24,7 @@ function Dashboard() {
   return (
     <>
       <Container fluid>
-        <Row>
+        {/*<Row>
           <Col lg="3" sm="6">
             <Card className="card-stats">
               <Card.Body>
@@ -129,25 +129,27 @@ function Dashboard() {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
+        </Row>*/}
+
         <Row>
           <Col md="12">
             <HeatMapPlot />
           </Col>
         </Row>
         <Row>
-          <Col md="8">
+          <Col md="9">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Accuracy Over Time Zone</Card.Title>
-                <p className="card-category">24hrs performance</p>
+                <Card.Title as="h4">Prediction Data</Card.Title>
+                <span className="card-category">Last 7 days performance</span>
+                <input type="date" style={{ marginLeft: "5%" }} />
               </Card.Header>
               <Card.Body>
-                <ErrorBarChart />
+                <GroupedBarChart />
               </Card.Body>
             </Card>
           </Col>
-          <Col md="4">
+          <Col md="3">
             <Card>
               <Card.Header>
                 <Card.Title as="h4">Prediction Data</Card.Title>
@@ -165,15 +167,6 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-        <Card>
-          <Card.Header>
-            <Card.Title as="h4">Prediction Data</Card.Title>
-            <p className="card-category">Last 7 days performance</p>
-          </Card.Header>
-          <Card.Body>
-            <GroupedBarChart />
-          </Card.Body>
-        </Card>
       </Container>
     </>
   );

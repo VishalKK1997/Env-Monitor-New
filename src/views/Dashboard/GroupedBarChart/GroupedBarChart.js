@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import * as Zoom from "chartjs-plugin-zoom";
-import { colors } from "constants/AQIcolors";
+import colors from "constants/AQIcolors";
 
 const data = {
   labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
   datasets: [
     {
-      label: "Best Quality",
+      label: colors[0].title,
       data: [3, 10, 13, 15, 22, 30, 23],
-      backgroundColor: colors[5],
+      backgroundColor: colors[0].color,
     },
     {
-      label: "Good Quality",
+      label: colors[1].title,
       data: [3, 10, 13, 15, 22, 30, 23],
-      backgroundColor: colors[4],
+      backgroundColor: colors[1].color,
     },
     {
-      label: "Moderate Quality",
+      label: colors[2].title,
       data: [2, 3, 20, 5, 1, 4, 2],
-      backgroundColor: colors[3],
+      backgroundColor: colors[2].color,
     },
     {
-      label: "Bad Quality",
+      label: colors[3].title,
       data: [12, 19, 3, 5, 2, 3, 3],
-      backgroundColor: colors[2],
+      backgroundColor: colors[3].color,
     },
     {
-      label: "Worst Quality",
+      label: colors[4].title,
       data: [12, 19, 3, 5, 2, 3, 3],
-      backgroundColor: colors[1],
+      backgroundColor: colors[4].color,
     },
   ],
 };

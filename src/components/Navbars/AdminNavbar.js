@@ -76,11 +76,13 @@ function Header() {
                 onClick={(e) => e.preventDefault()}
                 className="m-0"
               >
-                <i className="nc-icon nc-palette"></i>
+                {/*<i className="nc-icon nc-palette"></i>*/}
+
                 <span className="d-lg-none ml-1">Dashboard</span>
               </Nav.Link>
             </Nav.Item>
-            <Dropdown as={Nav.Item}>
+            {/*
+              <Dropdown as={Nav.Item}>
               <Dropdown.Toggle
                 as={Nav.Link}
                 data-toggle="dropdown"
@@ -125,7 +127,9 @@ function Header() {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Nav.Item>
+            */}
+
+            {/*<Nav.Item>
               <Nav.Link
                 className="m-0"
                 href="#pablo"
@@ -134,10 +138,10 @@ function Header() {
                 <i className="nc-icon nc-zoom-split"></i>
                 <span className="d-lg-block"> Search</span>
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item>*/}
           </Nav>
           <Nav className="ml-auto" navbar>
-            <Nav.Item>
+            {/*<Nav.Item>
               <Nav.Link
                 className="m-0"
                 href="#pablo"
@@ -200,7 +204,7 @@ function Header() {
               >
                 <span className="no-icon">Log out</span>
               </Nav.Link>
-            </Nav.Item>
+            </Nav.Item>*/}
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -1,7 +1,9 @@
-export const colors = {
-  1: "#900d0b",
-  2: "#ed0202",
-  3: "#ec9704",
-  4: "#85d511",
-  5: "#1d9f32",
-};
+const colors = [
+  { title: "Good", color: "rgba(0, 176, 80, 0.7)" },
+  { title: "Satisfactory", color: "rgba(102, 153, 0, 0.7)" },
+  { title: "Moderately polluted", color: "rgba(229, 184, 183, 0.7)" },
+  { title: "Poor", color: "rgba(255, 192, 0, 0.7)" },
+  { title: "Severe", color: "rgba(192, 0, 0, 0.7)" },
+];
+
+export default colors;
