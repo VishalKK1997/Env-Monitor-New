@@ -7,6 +7,17 @@ import formatDate from "utils/formatDate";
 import "./GroupedBarChart.css";
 import BarChartDropdown from "./BarChartDropdown/BarChartDropdown";
 
+const dataFromApiData = {
+  "2021-01-16": [1, 7, 12, 0, 0],
+  "2021-01-17": [2, 3, 13, 0, 0],
+  "2021-01-18": [1, 6, 13, 0, 0],
+  "2021-01-19": [4, 5, 11, 0, 0],
+  "2021-01-20": [7, 1, 12, 0, 0],
+  "2021-01-21": [6, 5, 9, 0, 0],
+  "2021-01-22": [4, 8, 12, 0, 0],
+};
+
+
 const data = {
   labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
   datasets: [
@@ -89,8 +100,13 @@ const options = {
   },
 };
 
+const builApiString = (date) => {
+  const demoApiCallString1 = `http://127.0.0.1:5000/pred_aqi_count_weekly?date=2021-01-22&grid=8`;
+  const demoApiCallString2 = `http://127.0.0.1:5000/pred_aqi_count_weekly?date=2021-01-22&grid=all`;
+};
+
 const GroupedBarChart = () => {
-  const [barData] = useState(data);
+  const [barData, setBarData] = useState(data);
   const [date, setdate] = useState(formatDate(new Date()));
   const [gridValue, setgridValue] = useState("All");
 
@@ -115,10 +131,12 @@ const GroupedBarChart = () => {
             <label className="grid_select_dropdown_label" htmlFor="grid-select">
               Select Grid
             </label>
-            <BarChartDropdown
-              value={gridValue}
-              onChangeGridValue={setgridValue}
-            />
+            {barData && (
+              <BarChartDropdown
+                value={gridValue}
+                onChangeGridValue={setgridValue}
+              />
+            )}
           </div>
         </div>
       </Card.Header>
