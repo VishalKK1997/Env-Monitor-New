@@ -69,7 +69,7 @@ function getCurrentDateTime() {
 function buildAPICallString(dateTime) {
   let date = dateTime.split("T")[0];
   let hour = dateTime.split("T")[1].split(":")[0];
-  return `gateway/prediction?date=${date}&hour=${hour}`;
+  return `http://127.0.0.1:5000/pred_by_date_hour?date=${date}&hour=${hour}`;
 }
 
 const HeatMapPlot = () => {

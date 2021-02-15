@@ -32,7 +32,7 @@ const POIListCard = () => {
           <Row>
             <Col>
               <div>POIs</div>
-              <label for="poi-dropdown">Select POI type</label>
+              <label htmlFor="poi-dropdown">Select POI type</label>
               <Dropdown id="poi-dropdown">
                 <Dropdown.Toggle>All</Dropdown.Toggle>
                 <Dropdown.Menu>
