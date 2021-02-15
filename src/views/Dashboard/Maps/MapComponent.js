@@ -14,7 +14,7 @@ import POICard from "./POICard";
 import styles from "../../../styles/DashboardHeatMapPlotStyles";
 import { DashboardHeatmapContext } from "./HeatMapPlot";
 
-import hotelIcon from "./motel-2.png";
+import POIIcons from "../../../icons/POIIcons";
 
 const libraries = ["places"];
 
@@ -43,7 +43,7 @@ const MapComponent = (props) => {
   };
 
   return (
-    <Container>
+    <Container style={{ width: "90%" }}>
       <Row>
         <Col>
           {!isLoaded ? (
@@ -90,7 +90,7 @@ const MapComponent = (props) => {
                     key={"Marker" + idx}
                     position={poi.location}
                     info={<POICard poi={poi} style={{ fontWeight: "500" }} />}
-                    icon={hotelIcon}
+                    icon={POIIcons[poi.poi_type]}
                   />
                 ))}
 

@@ -11,7 +11,10 @@ const MarkerWithInfoWindow = (props) => {
       onClick={() => {
         setClicked(true);
       }}
-      icon={props.icon}
+      icon={{
+        url: props.icon,
+        scaledSize: new window.google.maps.Size(40, 40),
+      }}
     >
       {isClicked && (
         <InfoWindow
