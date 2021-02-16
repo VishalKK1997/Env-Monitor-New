@@ -1,6 +1,6 @@
-import hotelIcon from "./hotel.png";
-import parkIcon from "./park.png";
-import schoolIcon from "./school.png";
+import hotelIcon from "./hotel.svg";
+import parkIcon from "./park.svg";
+import schoolIcon from "./school.svg";
 
 const POIIcons = {
   hotel: hotelIcon,

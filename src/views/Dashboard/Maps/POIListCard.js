@@ -31,16 +31,8 @@ const POIListCard = () => {
     Rating: ratingSortFunction,
   };
 
-  const buildListData = ({ index, style }) => {
-    return (
-      <ListItem key={index} style={style}>
-        <POICard poi={filteredArray[index]} key={`POI${index}`} />
-      </ListItem>
-    );
-  };
-
   const sortListData = (array, sortFunction) => {
-    return array.sort(sortFunction);
+    return [...array].sort(sortFunction);
   };
 
   const onSortByValueChange = (value) => {
