@@ -15,6 +15,7 @@ import {
   InputGroup,
   Row,
   Button,
+  Spinner,
 } from "react-bootstrap";
 import _ from "lodash";
 import "./RouteRecommender.css";
@@ -79,7 +80,20 @@ const RouteRecommender = () => {
 
   if (loadError) return "Error loading Maps";
   if (!isLoaded) return "Loading Google Maps...";
-  if (loading) return "Loading...";
+  if (loading)
+    return (
+      <div
+        style={{
+          width: "80vw",
+          height: "80vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Spinner size="md" animation="border" />
+      </div>
+    );
 
   const handleSubmit = async () => {
     setloading(true);
@@ -135,7 +149,7 @@ const RouteRecommender = () => {
         const pathOpt3 = {
           ...pathOptions,
           strokeColor: "#06b151",
-          strokeWeight: 9,
+          strokeWeight: 12,
           zIndex: 1,
           paths: returnedPath3,
         };
@@ -204,7 +218,7 @@ const RouteRecommender = () => {
                 )}
                 {safestRoute && (
                   <Polyline
-                    path={safestRoute}
+                    path={safestRoute.path}
                     options={safestRoute.pathOptions}
                   />
                 )}
@@ -304,6 +318,7 @@ const RouteRecommender = () => {
                     </div>
 
                     <RangeSlider
+                      disabled={!goValue}
                       min={0}
                       max={10}
                       value={alphaValue}
