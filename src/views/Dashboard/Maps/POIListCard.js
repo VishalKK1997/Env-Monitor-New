@@ -18,7 +18,7 @@ const POIListCard = () => {
   };
 
   const ratingSortFunction = (poiA, poiB) => {
-    return poiA.rating - poiB.rating;
+    return poiB.rating - poiA.rating;
   };
 
   const priceSortFunction = (poiA, poiB) => {
