@@ -83,6 +83,10 @@ const RouteRecommender = () => {
 
   const handleSubmit = async () => {
     setloading(true);
+    setcustomRoute(null);
+    setshortestRoute(null);
+    setoptimalRoute(null);
+    setsafestRoute(null);
     if (goValue) {
       const res = await routeWithAlpha(
         currentpos,
