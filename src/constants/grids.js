@@ -1,5 +1,5 @@
 export const grids = [
-  [{ title: "All", serial: 0 }],
+  [{ title: "All", serial: "All" }],
   [
     { title: "Grid 1", serial: 1 },
     { title: "Grid 2", serial: 2 },

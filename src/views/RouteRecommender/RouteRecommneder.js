@@ -219,6 +219,7 @@ const RouteRecommender = () => {
                       onClick={() => setCheckboxVal((val) => !val)}
                       type="checkbox"
                       className="input_checkbox"
+                      disabled={true}
                     />
                     <span className="span_checkbox">
                       Set as current location

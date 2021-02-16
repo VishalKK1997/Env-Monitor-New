@@ -1,38 +1,10 @@
 import colors from "constants/AQIcolors";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { Pie } from "react-chartjs-2";
 import formatDate from "utils/formatDate";
+import { AQICountDaily } from "utils/networkUtil";
 import "./PieChart.css";
-
-const data = {
-  labels: [
-    colors[0].title,
-    colors[1].title,
-    colors[2].title,
-    colors[3].title,
-    colors[4].title,
-  ],
-  datasets: [
-    {
-      data: [300, 50, 100, 50, 25],
-      backgroundColor: [
-        colors[0].color,
-        colors[1].color,
-        colors[2].color,
-        colors[3].color,
-        colors[4].color,
-      ],
-      hoverBackgroundColor: [
-        colors[0].color,
-        colors[1].color,
-        colors[2].color,
-        colors[3].color,
-        colors[4].color,
-      ],
-    },
-  ],
-};
 
 const options = {
   responsive: true,
@@ -62,6 +34,46 @@ const options = {
 
 const PieChart = () => {
   const [date, setdate] = useState(formatDate(new Date()));
+  const [chartData, setchartData] = useState(null);
+
+  useEffect(() => {
+    const apiData = async () => {
+      const response = await AQICountDaily(date);
+      const data = {
+        labels: [
+          colors[0].title,
+          colors[1].title,
+          colors[2].title,
+          colors[3].title,
+          colors[4].title,
+        ],
+        datasets: [
+          {
+            data: response,
+            backgroundColor: [
+              colors[0].color,
+              colors[1].color,
+              colors[2].color,
+              colors[3].color,
+              colors[4].color,
+            ],
+            hoverBackgroundColor: [
+              colors[0].color,
+              colors[1].color,
+              colors[2].color,
+              colors[3].color,
+              colors[4].color,
+            ],
+          },
+        ],
+      };
+      setchartData(data);
+    };
+
+    apiData();
+  }, [date]);
+
+  if (!chartData) return <div>Loading...</div>;
   return (
     <Card style={{ height: "100%" }}>
       <Card.Header>
@@ -83,7 +95,7 @@ const PieChart = () => {
               name="date-input"
             />
           </div>
-          <Pie data={data} options={options} width={150} height={150} />
+          <Pie data={chartData} options={options} width={150} height={150} />
         </div>
       </Card.Body>
     </Card>

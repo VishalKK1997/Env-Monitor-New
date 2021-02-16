@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import * as Zoom from "chartjs-plugin-zoom";
 import colors from "constants/AQIcolors";
@@ -6,6 +6,7 @@ import { Card } from "react-bootstrap";
 import formatDate from "utils/formatDate";
 import "./GroupedBarChart.css";
 import BarChartDropdown from "./BarChartDropdown/BarChartDropdown";
+import { AQICountWeekly } from "utils/networkUtil";
 
 const dataFromApiData = {
   "2021-01-16": [1, 7, 12, 0, 0],
@@ -17,37 +18,36 @@ const dataFromApiData = {
   "2021-01-22": [4, 8, 12, 0, 0],
 };
 
-
-const data = {
-  labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
-  datasets: [
-    {
-      label: colors[0].title,
-      data: [3, 10, 13, 15, 22, 30, 23],
-      backgroundColor: colors[0].color,
-    },
-    {
-      label: colors[1].title,
-      data: [3, 10, 13, 15, 22, 30, 23],
-      backgroundColor: colors[1].color,
-    },
-    {
-      label: colors[2].title,
-      data: [2, 3, 20, 5, 1, 4, 2],
-      backgroundColor: colors[2].color,
-    },
-    {
-      label: colors[3].title,
-      data: [12, 19, 3, 5, 2, 3, 3],
-      backgroundColor: colors[3].color,
-    },
-    {
-      label: colors[4].title,
-      data: [12, 19, 3, 5, 2, 3, 3],
-      backgroundColor: colors[4].color,
-    },
-  ],
-};
+// const data = {
+//   labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+//   datasets: [
+//     {
+//       label: colors[0].title,
+//       data: [3, 10, 13, 15, 22, 30, 23],
+//       backgroundColor: colors[0].color,
+//     },
+//     {
+//       label: colors[1].title,
+//       data: [3, 10, 13, 15, 22, 30, 23],
+//       backgroundColor: colors[1].color,
+//     },
+//     {
+//       label: colors[2].title,
+//       data: [2, 3, 20, 5, 1, 4, 2],
+//       backgroundColor: colors[2].color,
+//     },
+//     {
+//       label: colors[3].title,
+//       data: [12, 19, 3, 5, 2, 3, 3],
+//       backgroundColor: colors[3].color,
+//     },
+//     {
+//       label: colors[4].title,
+//       data: [12, 19, 3, 5, 2, 3, 3],
+//       backgroundColor: colors[4].color,
+//     },
+//   ],
+// };
 
 const options = {
   responsive: true,
@@ -106,9 +106,52 @@ const builApiString = (date) => {
 };
 
 const GroupedBarChart = () => {
-  const [barData, setBarData] = useState(data);
+  const [barData, setBarData] = useState(null);
   const [date, setdate] = useState(formatDate(new Date()));
   const [gridValue, setgridValue] = useState("All");
+
+  useEffect(() => {
+    const apiData = async () => {
+      const grid = gridValue === "All" ? "all" : gridValue;
+      const reponse = await AQICountWeekly(date, grid);
+      const data = {
+        labels: reponse.days,
+        datasets: [
+          {
+            label: colors[0].title,
+            data: reponse.AQI1,
+            backgroundColor: colors[0].color,
+          },
+          {
+            label: colors[1].title,
+            data: reponse.AQI2,
+            backgroundColor: colors[1].color,
+          },
+          {
+            label: colors[2].title,
+            data: reponse.AQI3,
+            backgroundColor: colors[2].color,
+          },
+          {
+            label: colors[3].title,
+            data: reponse.AQI4,
+            backgroundColor: colors[3].color,
+          },
+          {
+            label: colors[4].title,
+            data: reponse.AQI5,
+            backgroundColor: colors[4].color,
+          },
+        ],
+      };
+      setBarData(data);
+    };
+    apiData();
+  }, [date, gridValue]);
+
+  if (!barData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Card style={{ height: "100%" }}>

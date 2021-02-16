@@ -27,4 +27,16 @@ async function predTableData(gridId, dateTime) {
   }
 }
 
-export { predByDateHour, predTableData };
+const AQICountWeekly = async (date, grid) => {
+  return await fetch(
+    `${BASE_URL}/pred_aqi_count_weekly?date=${date}&grid=${grid}`
+  ).then((res) => res.json());
+};
+
+const AQICountDaily = async (date) => {
+  return await fetch(
+    `${BASE_URL}/whole_grid_daily_aqi_count?date=${date}`
+  ).then((res) => res.json());
+};
+
+export { predByDateHour, predTableData, AQICountWeekly, AQICountDaily };
