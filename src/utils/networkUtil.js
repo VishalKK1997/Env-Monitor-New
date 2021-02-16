@@ -39,4 +39,17 @@ const AQICountDaily = async (date) => {
   ).then((res) => res.json());
 };
 
-export { predByDateHour, predTableData, AQICountWeekly, AQICountDaily };
+const routeWithAlpha = async (source, dest, alpha) => {
+  // console.log(source, dest, alpha, "called");
+  return await fetch(
+    `${BASE_URL}/route_recommendation?source=${source.lat},${source.lng}&destination=${dest.lat},${dest.lng}&alpha=${alpha}`
+  ).then((res) => res.json());
+};
+
+export {
+  predByDateHour,
+  predTableData,
+  AQICountWeekly,
+  AQICountDaily,
+  routeWithAlpha,
+};

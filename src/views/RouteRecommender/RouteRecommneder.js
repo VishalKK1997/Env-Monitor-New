@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import {
   GoogleMap,
   useLoadScript,
-  DirectionsRenderer,
-  DirectionsService,
   Marker,
-  Rectangle,
   Polyline,
   Autocomplete,
 } from "@react-google-maps/api";
@@ -16,25 +13,15 @@ import {
   Form,
   FormControl,
   InputGroup,
-  ProgressBar,
   Row,
   Button,
 } from "react-bootstrap";
 import _ from "lodash";
 import "./RouteRecommender.css";
-import getLatLng from "getLatLng";
 import Geocode from "react-geocode";
 import RangeSlider from "react-bootstrap-range-slider";
-import {
-  path1,
-  path2,
-  path3,
-  path1Options,
-  path2Options,
-  path3Options,
-  pathwithAlpha,
-  pathwithAlphaOptions,
-} from "constants/paths";
+import { routeWithAlpha } from "utils/networkUtil";
+import formatPath from "utils/formatPath";
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -47,20 +34,20 @@ const center = {
   lng: 87.2954336733082,
 };
 
-const xcoords = [23.534924, 23.5426365, 23.550349, 23.5580615, 23.565774];
-const ycoords = [87.269568, 87.28258925, 87.2956105, 87.30863175, 87.321653];
-let geodata = [];
-const predictionData = [1, 2, 3, 4, 2, 2, 2, 2, 4, 5, 3, 2, 1, 2, 5, 3];
-let k = 0;
-for (let i = 0; i < xcoords.length - 1; i++) {
-  for (let j = 0; j < ycoords.length - 1; j++) {
-    geodata.push({
-      sw: { lat: xcoords[i], lng: ycoords[j] },
-      ne: { lat: xcoords[i + 1], lng: ycoords[j + 1] },
-      color: predictionData[k++],
-    });
-  }
-}
+const pathOptions = {
+  strokeColor: "#ffaa00",
+  strokeOpacity: 0.8,
+  strokeWeight: 9,
+  fillColor: "#FF0000",
+  fillOpacity: 0.35,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+  radius: 30000,
+  paths: [],
+  zIndex: 1,
+};
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
@@ -69,74 +56,109 @@ const RouteRecommender = () => {
   const [autoCompleteSource, setautoCompleteSource] = useState(null);
   const [autoCompleteDest, setautoCompleteDest] = useState(null);
   const [goValue, setgoValue] = useState(false);
-  const [goDemoValue, setgoDemoValue] = useState(false);
+  const [customRoute, setcustomRoute] = useState(null);
   const [alphaValue, setAlphaValue] = useState(0);
   const [shortestRouteCheck, setShortestRouteCheck] = useState(false);
+  const [shortestRoute, setshortestRoute] = useState(null);
   const [optimalRouteCheck, setOptimalRouteCheck] = useState(false);
+  const [optimalRoute, setoptimalRoute] = useState(null);
   const [safestRouteCheck, setSafestRouteCheck] = useState(false);
-  const [response, setResponse] = useState(null);
+  const [safestRoute, setsafestRoute] = useState(null);
+  const [loading, setloading] = useState(false);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
-  const [currentpos, setCurrentpos] = useState({});
+  const [currentpos, setCurrentpos] = useState(null);
   const [destination, setDestination] = useState(null);
   const destRef = useRef(null);
-  let watchID;
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition((position) => {
-  //     console.log("moved in current");
-  //     setCurrentpos({
-  //       lat: position.coords.latitude,
-  //       lng: position.coords.longitude,
-  //     });
-  //   });
-
-  //   const watchID = navigator.geolocation.watchPosition((position) => {
-  //     console.log("moved in watch", {
-  //       lat: position.coords.latitude,
-  //       lng: position.coords.longitude,
-  //     });
-  //     setCurrentpos({
-  //       lat: position.coords.latitude,
-  //       lng: position.coords.longitude,
-  //     }),
-  //       (error) => alert(JSON.stringify(error)),
-  //       {
-  //         enableHighAccuracy: true,
-  //         timeout: 20000,
-  //         maximumAge: 0,
-  //         // distanceFilter: 100,
-  //       };
-  //   });
-  // }, []);
+  const isValid =
+    (goValue || shortestRouteCheck || optimalRouteCheck || safestRouteCheck) &&
+    currentpos &&
+    destination;
 
   if (loadError) return "Error loading Maps";
   if (!isLoaded) return "Loading Google Maps...";
+  if (loading) return "Loading...";
 
-  function handleSubmit() {
-    // Geocode.fromAddress(destRef.current.value).then(
-    //   (response) => {
-    //     const { lat, lng } = response.results[0].geometry.location;
-    //     console.log(lat, lng);
-    //     setDestination({ lat, lng });
-    //   },
-    //   (error) => {
-    //     console.error(error);
-    //   }
-    // );
-  }
-
-  const directionsCallback = (res) => {
-    console.log(res, "res in directionsCallback");
-
-    if (res !== null) {
-      console.log(res, "directionsCallback");
-      if (res.status === "OK") {
-        setResponse(res);
-      } else {
-        console.log("response: ", res);
+  const handleSubmit = async () => {
+    setloading(true);
+    if (goValue) {
+      const res = await routeWithAlpha(
+        currentpos,
+        destination,
+        alphaValue / 10
+      );
+      const returnedPath = formatPath(res.path_req.path.lat_longs);
+      const pathOpt = {
+        ...pathOptions,
+        strokeColor: "#ffaa00",
+        strokeWeight: 6,
+        zIndex: 2,
+        paths: returnedPath,
+      };
+      setcustomRoute({ path: returnedPath, pathOptions: pathOpt });
+    } else {
+      if (shortestRouteCheck) {
+        const res1 = await routeWithAlpha(currentpos, destination, 1);
+        const returnedPath1 = formatPath(res1.path_req.path.lat_longs);
+        const pathOpt1 = {
+          ...pathOptions,
+          strokeColor: "#c10704",
+          strokeWeight: 3,
+          zIndex: 3,
+          paths: returnedPath1,
+        };
+        setshortestRoute({ path: returnedPath1, pathOptions: pathOpt1 });
       }
+
+      if (optimalRouteCheck) {
+        const res2 = await routeWithAlpha(currentpos, destination, 0.5);
+        const returnedPath2 = formatPath(res2.path_req.path.lat_longs);
+        const pathOpt2 = {
+          ...pathOptions,
+          strokeColor: "#00b6ff",
+          strokeWeight: 6,
+          zIndex: 2,
+          paths: returnedPath2,
+        };
+        setoptimalRoute({ path: returnedPath2, pathOptions: pathOpt2 });
+      }
+
+      if (safestRouteCheck) {
+        const res3 = await routeWithAlpha(currentpos, destination, 0);
+        const returnedPath3 = formatPath(res3.path_req.path.lat_longs);
+        const pathOpt3 = {
+          ...pathOptions,
+          strokeColor: "#06b151",
+          strokeWeight: 9,
+          zIndex: 1,
+          paths: returnedPath3,
+        };
+        setsafestRoute({ path: returnedPath3, pathOptions: pathOpt3 });
+      }
+    }
+    setgoValue(false);
+    setShortestRouteCheck(false);
+    setOptimalRouteCheck(false);
+    setSafestRouteCheck(false);
+    setAlphaValue(0);
+    setloading(false);
+  };
+
+  const handleCurrentLocation = () => {
+    if (checkboxVal) {
+      setCheckboxVal(false);
+      setCurrentpos(null);
+    } else {
+      setCheckboxVal(true);
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log(position, "currenpos");
+        setCurrentpos({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      });
     }
   };
 
@@ -151,27 +173,36 @@ const RouteRecommender = () => {
             <Col md={7}>
               <GoogleMap
                 mapContainerStyle={mapContainerStyle}
-                zoom={15}
+                zoom={14}
                 center={center}
               >
                 {currentpos && <Marker position={currentpos} />}
                 {destination && <Marker position={destination} />}
 
-                {goValue && !goDemoValue && (
+                {customRoute && (
                   <Polyline
-                    path={pathwithAlpha}
-                    options={pathwithAlphaOptions}
+                    path={customRoute.path}
+                    options={customRoute.pathOptions}
                   />
                 )}
 
-                {(goDemoValue || safestRouteCheck) && (
-                  <Polyline path={path1} options={path1Options} />
+                {shortestRoute && (
+                  <Polyline
+                    path={shortestRoute.path}
+                    options={shortestRoute.pathOptions}
+                  />
                 )}
-                {(goDemoValue || optimalRouteCheck) && (
-                  <Polyline path={path2} options={path2Options} />
+                {optimalRoute && (
+                  <Polyline
+                    path={optimalRoute.path}
+                    options={optimalRoute.pathOptions}
+                  />
                 )}
-                {(goDemoValue || shortestRouteCheck) && (
-                  <Polyline path={path3} options={path3Options} />
+                {safestRoute && (
+                  <Polyline
+                    path={safestRoute}
+                    options={safestRoute.pathOptions}
+                  />
                 )}
               </GoogleMap>
             </Col>
@@ -208,6 +239,7 @@ const RouteRecommender = () => {
                       <FormControl
                         disabled={checkboxVal}
                         ref={destRef}
+                        // value={autoCompleteSource ? autoCompleteSource : ""}
                         id="source_input"
                         aria-describedby="source_input"
                       />
@@ -216,10 +248,9 @@ const RouteRecommender = () => {
                   <div>
                     <input
                       value={checkboxVal}
-                      onClick={() => setCheckboxVal((val) => !val)}
+                      onClick={handleCurrentLocation}
                       type="checkbox"
                       className="input_checkbox"
-                      disabled={true}
                     />
                     <span className="span_checkbox">
                       Set as current location
@@ -280,15 +311,6 @@ const RouteRecommender = () => {
 
                   <label>Show 3 paths</label>
                   <div>
-                    <div className="go_demo_checkbox">
-                      <input
-                        value={goDemoValue}
-                        onClick={() => setgoDemoValue((val) => !val)}
-                        type="checkbox"
-                        className="input_checkbox"
-                      />
-                      <span className="span_checkbox">Go Demo</span>
-                    </div>
                     <div className="div_checkbox">
                       <div className="go_checkbox">
                         <input
@@ -296,10 +318,11 @@ const RouteRecommender = () => {
                           onClick={() => setShortestRouteCheck((val) => !val)}
                           type="checkbox"
                           className="input_checkbox"
+                          disabled={goValue}
                         />
                         <span
                           style={{
-                            backgroundColor: "#ff3700",
+                            backgroundColor: "#c10704",
                             width: "35px",
                             height: "13px",
                             display: "inline-block",
@@ -314,6 +337,7 @@ const RouteRecommender = () => {
                           onClick={() => setOptimalRouteCheck((val) => !val)}
                           type="checkbox"
                           className="input_checkbox"
+                          disabled={goValue}
                         />
                         <span
                           style={{
@@ -332,10 +356,11 @@ const RouteRecommender = () => {
                           onClick={() => setSafestRouteCheck((val) => !val)}
                           type="checkbox"
                           className="input_checkbox"
+                          disabled={goValue}
                         />
                         <span
                           style={{
-                            backgroundColor: "#ffaa00",
+                            backgroundColor: "#06b151",
                             width: "35px",
                             height: "13px",
                             display: "inline-block",
@@ -348,23 +373,40 @@ const RouteRecommender = () => {
                   </div>
 
                   <label>Show custom path</label>
-                  <div className="go_checkbox">
+                  <div style={{ marginLeft: "10px" }}>
                     <input
                       value={goValue}
                       onClick={() => setgoValue((val) => !val)}
                       type="checkbox"
                       className="input_checkbox"
+                      disabled={
+                        shortestRouteCheck ||
+                        optimalRouteCheck ||
+                        safestRouteCheck
+                      }
                     />
-                    <span className="span_checkbox">Go</span>
+                    <span
+                      style={{
+                        backgroundColor: "#ffaa00",
+                        width: "35px",
+                        height: "13px",
+                        display: "inline-block",
+                        marginRight: "4px",
+                      }}
+                    ></span>
+                    <span className="span_checkbox">Custom Path</span>
                   </div>
-                  <Button
-                    onClick={handleSubmit}
-                    className="btn-fill mt-3"
-                    variant="primary"
-                    size="md"
-                  >
-                    Submit
-                  </Button>
+                  <div style={{ marginTop: "40px" }}>
+                    <Button
+                      onClick={handleSubmit}
+                      className="btn-fill mt-3"
+                      variant="primary"
+                      size="md"
+                      disabled={!isValid}
+                    >
+                      Submit
+                    </Button>
+                  </div>
                 </Card.Body>
               </Card>
             </Col>
