@@ -313,7 +313,7 @@ const poiData = [
     rating: 3.9,
     poi_type: "school",
     grid_id: 0,
-    image_url: "https://i.ytimg.com/vi/zZMixD3vTpI/hqdefault.jpg",
+    image_url: "https://directory.edugorilla.com/wp-content/uploads/sites/6/2018/06/e0586295d452672c0788e07ab30e74d3.jpeg",
   },
   {
     name: "Guru teg",
@@ -428,7 +428,7 @@ const poiData = [
     poi_type: "park",
     grid_id: 14,
     image_url:
-      "https://thementalclub.com/wp-content/uploads/2017/04/anand-amusement-park.jpg",
+      "https://www.hlimg.com/images/things2do/738X538/ttd_1522842314m1.jpg",
   },
 
 ];
