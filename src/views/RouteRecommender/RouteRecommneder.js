@@ -177,7 +177,7 @@ const RouteRecommender = () => {
             </Col>
 
             <Col md={5}>
-              <Card>
+              <Card style={{ height: "100%" }}>
                 <Card.Body>
                   <Autocomplete
                     onLoad={(autocomplete) =>
@@ -257,7 +257,16 @@ const RouteRecommender = () => {
                   </Autocomplete>
 
                   <Form.Group className="mb-4" controlId="formBasicRange">
-                    <Form.Label>Alpha value</Form.Label>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Form.Label>Safest</Form.Label>
+                      <Form.Label>Shortest</Form.Label>
+                    </div>
+
                     <RangeSlider
                       min={0}
                       max={10}
@@ -267,7 +276,9 @@ const RouteRecommender = () => {
                       onChange={(e) => setAlphaValue(e.target.value)}
                     />
                   </Form.Group>
-                  <div className="div_checkbox">
+
+                  <label>Show 3 paths</label>
+                  <div>
                     <div className="go_demo_checkbox">
                       <input
                         value={goDemoValue}
@@ -277,74 +288,74 @@ const RouteRecommender = () => {
                       />
                       <span className="span_checkbox">Go Demo</span>
                     </div>
-                    <div className="go_checkbox">
-                      <input
-                        value={goValue}
-                        onClick={() => setgoValue((val) => !val)}
-                        type="checkbox"
-                        className="input_checkbox"
-                      />
-                      <span className="span_checkbox">Go</span>
+                    <div className="div_checkbox">
+                      <div className="go_checkbox">
+                        <input
+                          value={shortestRouteCheck}
+                          onClick={() => setShortestRouteCheck((val) => !val)}
+                          type="checkbox"
+                          className="input_checkbox"
+                        />
+                        <span
+                          style={{
+                            backgroundColor: "#ff3700",
+                            width: "35px",
+                            height: "13px",
+                            display: "inline-block",
+                            marginRight: "4px",
+                          }}
+                        ></span>
+                        <span className="span_checkbox">Shortest</span>
+                      </div>
+                      <div className="go_checkbox">
+                        <input
+                          value={optimalRouteCheck}
+                          onClick={() => setOptimalRouteCheck((val) => !val)}
+                          type="checkbox"
+                          className="input_checkbox"
+                        />
+                        <span
+                          style={{
+                            backgroundColor: "#00b6ff",
+                            width: "35px",
+                            height: "13px",
+                            display: "inline-block",
+                            marginRight: "4px",
+                          }}
+                        ></span>
+                        <span className="span_checkbox">Optimal </span>
+                      </div>
+                      <div className="go_checkbox">
+                        <input
+                          value={safestRouteCheck}
+                          onClick={() => setSafestRouteCheck((val) => !val)}
+                          type="checkbox"
+                          className="input_checkbox"
+                        />
+                        <span
+                          style={{
+                            backgroundColor: "#ffaa00",
+                            width: "35px",
+                            height: "13px",
+                            display: "inline-block",
+                            marginRight: "4px",
+                          }}
+                        ></span>
+                        <span className="span_checkbox">Safest</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="div_checkbox">
-                    <div className="go_checkbox">
-                      <input
-                        value={shortestRouteCheck}
-                        onClick={() => setShortestRouteCheck((val) => !val)}
-                        type="checkbox"
-                        className="input_checkbox"
-                      />
-                      <span
-                        style={{
-                          backgroundColor: "#ff3700",
-                          width: "35px",
-                          height: "13px",
-                          display: "inline-block",
-                          marginRight: "4px",
-                        }}
-                      ></span>
-                      <span className="span_checkbox">Shortest</span>
-                    </div>
-                    <div className="go_checkbox">
-                      <input
-                        value={optimalRouteCheck}
-                        onClick={() => setOptimalRouteCheck((val) => !val)}
-                        type="checkbox"
-                        className="input_checkbox"
-                      />
-                      <span
-                        style={{
-                          backgroundColor: "#00b6ff",
-                          width: "35px",
-                          height: "13px",
-                          display: "inline-block",
-                          marginRight: "4px",
-                        }}
-                      ></span>
-                      <span className="span_checkbox">Optimal </span>
-                    </div>
-                    <div className="go_checkbox">
-                      <input
-                        value={safestRouteCheck}
-                        onClick={() => setSafestRouteCheck((val) => !val)}
-                        type="checkbox"
-                        className="input_checkbox"
-                      />
-                      <span
-                        style={{
-                          backgroundColor: "#ffaa00",
-                          width: "35px",
-                          height: "13px",
-                          display: "inline-block",
-                          marginRight: "4px",
-                        }}
-                      ></span>
-                      <span className="span_checkbox">Safest</span>
-                    </div>
+                  <label>Show custom path</label>
+                  <div className="go_checkbox">
+                    <input
+                      value={goValue}
+                      onClick={() => setgoValue((val) => !val)}
+                      type="checkbox"
+                      className="input_checkbox"
+                    />
+                    <span className="span_checkbox">Go</span>
                   </div>
-
                   <Button
                     onClick={handleSubmit}
                     className="btn-fill mt-3"

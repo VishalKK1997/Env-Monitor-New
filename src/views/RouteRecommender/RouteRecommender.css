@@ -2,6 +2,13 @@
   padding-bottom: 2%;
 }
 
+.root label {
+  font-size: 14px;
+  color: dimgrey;
+  font-weight: 450;
+  margin-bottom: 10px;
+}
+
 .input_checkbox {
   margin-right: 6px;
 }
@@ -14,6 +21,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 10px 0 18px 10px;
 }
 
 .go_demo_checkbox {
