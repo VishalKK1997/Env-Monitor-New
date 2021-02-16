@@ -71,14 +71,14 @@ const HeatMapPlot = () => {
   return (
     <Card>
       <Card.Header>
-        <Card.Title as="h4">Heat Map Plot</Card.Title>
+        <Card.Title as="h4">Hourly Air Quality Prediction</Card.Title>
         <p className="card-category">24 hrs performance</p>
       </Card.Header>
       <Card.Body>
         <Container>
           <Row>
             <Col>
-              {!isLoading && gridData && predictionData ? (
+              {gridData && predictionData ? (
                 <DashboardHeatmapContext.Provider
                   value={{ gridData, poiData, dateTime, predictionData }}
                 >
@@ -94,7 +94,7 @@ const HeatMapPlot = () => {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row style={{ width: "90%", margin: "auto" }}>
             <Col>
               <MapLegendCard />
             </Col>
@@ -110,7 +110,11 @@ const HeatMapPlot = () => {
                   name="datetime"
                 />
                 <Button
-                  style={styles.dateSubmitButtonStyle}
+                  style={{
+                    ...styles.dateSubmitButtonStyle,
+                    backgroundColor: "#42a4f5",
+                    color: "white",
+                  }}
                   variant="primary"
                   disabled={isLoading}
                   onClick={!isLoading ? handleClick : null}
