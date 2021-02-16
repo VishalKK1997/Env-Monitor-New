@@ -8,41 +8,9 @@ import poiData from "../../../constants/POIData";
 import buildGrid from "../../../constants/GridBuilder";
 import styles from "../../../styles/DashboardHeatMapPlotStyles";
 
+import { predByDateHour } from "../../../utils/networkUtil";
+
 const DashboardHeatmapContext = React.createContext();
-
-// Demo function. Can be removed.
-function shuffle(array) {
-  var currentIndex = array.length,
-    temporaryValue,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
-// Demo Data builder.
-function buildDemoData() {
-  let demoArray = [1, 2, 3, 4, 2, 2, 2, 2, 4, 5, 3, 2, 1, 2, 5, 3];
-  let predictionData = shuffle(demoArray);
-  return predictionData;
-}
-
-// Network Request Simulator
-function simulateNetworkRequest(apiCallString) {
-  console.log(apiCallString);
-  return new Promise((resolve) => setTimeout(resolve(buildDemoData()), 2000));
-}
 
 // Get Current Date Time for first load.
 function getCurrentDateTime() {
@@ -65,13 +33,6 @@ function getCurrentDateTime() {
   // Format: 2021-02-02T00:21
 }
 
-// API call string builder.
-function buildAPICallString(dateTime) {
-  let date = dateTime.split("T")[0];
-  let hour = dateTime.split("T")[1].split(":")[0];
-  return `http://127.0.0.1:5000/pred_by_date_hour?date=${date}&hour=${hour}`;
-}
-
 const HeatMapPlot = () => {
   const [isLoading, setLoading] = useState(true);
   const [gridData, setGridData] = useState(null);
@@ -80,13 +41,7 @@ const HeatMapPlot = () => {
 
   useEffect(() => {
     if (isLoading) {
-      // After receiving endpoint, change the following simulateNetworkRequest to
-      // fetch(buildAPICallString(dateTime))
-      simulateNetworkRequest(buildAPICallString(dateTime))
-        // .then((res) => {
-        //   console.log(res);
-        //   return res.json();
-        // })
+      predByDateHour(dateTime)
         .then(
           (predictionData) => {
             setPredictionData(predictionData);
@@ -95,10 +50,11 @@ const HeatMapPlot = () => {
             document.getElementById("datetime").value = dateTime;
           },
           (error) => {
-            setLoading(false);
             alert(error);
+            setLoading(false);
           }
-        );
+        )
+        .catch((error) => alert(error));
     }
   }, [isLoading]);
 
@@ -115,14 +71,14 @@ const HeatMapPlot = () => {
   return (
     <Card>
       <Card.Header>
-        <Card.Title as="h4">Heat Map Plot</Card.Title>
+        <Card.Title as="h4">Hourly Air Quality Prediction</Card.Title>
         <p className="card-category">24 hrs performance</p>
       </Card.Header>
       <Card.Body>
         <Container>
           <Row>
             <Col>
-              {!isLoading && gridData && predictionData ? (
+              {gridData && predictionData ? (
                 <DashboardHeatmapContext.Provider
                   value={{ gridData, poiData, dateTime, predictionData }}
                 >
@@ -138,7 +94,7 @@ const HeatMapPlot = () => {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row style={{ width: "90%", margin: "auto" }}>
             <Col>
               <MapLegendCard />
             </Col>
@@ -154,7 +110,11 @@ const HeatMapPlot = () => {
                   name="datetime"
                 />
                 <Button
-                  style={styles.dateSubmitButtonStyle}
+                  style={{
+                    ...styles.dateSubmitButtonStyle,
+                    backgroundColor: "#42a4f5",
+                    color: "white",
+                  }}
                   variant="primary"
                   disabled={isLoading}
                   onClick={!isLoading ? handleClick : null}

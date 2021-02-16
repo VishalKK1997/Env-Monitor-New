@@ -1,10 +1,6 @@
 import React, { useCallback, useState } from "react";
 
-import styles from "../../../styles/DashboardHeatMapPlotStyles";
-
 const MapLegendItem = (props) => {
-  const [width, setWidth] = useState(null);
-
   const canvasFill = useCallback((node) => {
     if (node) {
       let ctx = node.getContext("2d");

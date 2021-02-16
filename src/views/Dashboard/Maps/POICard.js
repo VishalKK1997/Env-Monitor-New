@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image } from "react-bootstrap";
+import { Card, Image, Container, Row, Col } from "react-bootstrap";
 
 import getInfoBuilder from "../../../constants/POIInfoViewBuilder";
 import styles from "../../../styles/DashboardHeatMapPlotStyles";
@@ -14,13 +14,17 @@ const POICard = (props) => {
       style={{
         ...styles.fullWidthStyle,
         ...props.style,
-        marginTop: "2px",
-        marginBottom: "2px",
+        margin:"10px",
+        width: "267px",
+        height: "380px",
+        float: "left",
       }}
     >
-      <Image
+      <img
         src={props.poi.image_url}
-        rounded
+        style={{ padding: "5px" }}
+        height={"250px"}
+        width={"100%"}
       />
       <Card.Header>
         <Card.Title style={styles.boldFont}>{props.poi.name}</Card.Title>

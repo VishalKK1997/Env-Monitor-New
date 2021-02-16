@@ -7,7 +7,7 @@ import AQIcolors from "../../../constants/AQIcolors";
 import GridDataTable from "./GridDataTable";
 
 function mapColor(aqi) {
-  return Object.values(AQIcolors)[aqi - 1].color;
+  return Object.values(AQIcolors)[aqi-1].color;
 }
 
 const RectangleWithInfoWindow = (props) => {

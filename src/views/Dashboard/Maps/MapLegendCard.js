@@ -6,7 +6,7 @@ import AQIcolors from "../../../constants/AQIcolors";
 const MapLegendCard = () => {
   return (
     <Card style={styles.fullWidthStyle}>
-      <Card.Header>Legends</Card.Header>
+      <Card.Header>Pollution Levels</Card.Header>
       <Card.Body>
         <Container>
           <Row style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -25,15 +25,3 @@ const MapLegendCard = () => {
 };
 
 export default MapLegendCard;
-
-// <Table bordered>
-// <thead></thead>
-// <tbody>
-//   {AQIcolors.map((aqiClass, index) => (
-//     <tr key={`Legend${index}`}>
-//       <td style={{ backgroundColor: aqiClass.color }}></td>
-//       <td>{aqiClass.title}</td>
-//     </tr>
-//   ))}
-// </tbody>
-// </Table>
