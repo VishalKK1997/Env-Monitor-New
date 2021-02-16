@@ -27,7 +27,7 @@ import _ from "lodash";
 
 import routes from "routes.js";
 
-import sidebarImage from "assets/img/sidebar-2.jpg";
+import sidebarImage from "assets/img/sidebar-5.jpg";
 
 function Admin() {
   const [image, setImage] = React.useState(sidebarImage);
@@ -67,7 +67,7 @@ function Admin() {
     <div className="wrapper">
       <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
       <div className="main-panel" ref={mainPanel}>
-        <AdminNavbar />
+        
         <div className="content">
           <Switch>{getRoutes(routes)}</Switch>
         </div>

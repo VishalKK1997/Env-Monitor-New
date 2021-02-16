@@ -27,9 +27,9 @@ const RectangleWithInfoWindow = (props) => {
           west: props.point.sw.lng,
         }}
         options={{
-          strokeColor: mapColor(props.point.prediction),
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
+          // strokeColor: mapColor(props.point.prediction),
+          // strokeOpacity: 0.8,
+          strokeWeight: 0,
           fillColor: mapColor(props.point.prediction),
           fillOpacity: 0.35,
         }}

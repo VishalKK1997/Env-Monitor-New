@@ -8,16 +8,6 @@ import "./GroupedBarChart.css";
 import BarChartDropdown from "./BarChartDropdown/BarChartDropdown";
 import { AQICountWeekly } from "utils/networkUtil";
 
-const dataFromApiData = {
-  "2021-01-16": [1, 7, 12, 0, 0],
-  "2021-01-17": [2, 3, 13, 0, 0],
-  "2021-01-18": [1, 6, 13, 0, 0],
-  "2021-01-19": [4, 5, 11, 0, 0],
-  "2021-01-20": [7, 1, 12, 0, 0],
-  "2021-01-21": [6, 5, 9, 0, 0],
-  "2021-01-22": [4, 8, 12, 0, 0],
-};
-
 // const data = {
 //   labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
 //   datasets: [
@@ -100,15 +90,18 @@ const options = {
   },
 };
 
-const builApiString = (date) => {
-  const demoApiCallString1 = `http://127.0.0.1:5000/pred_aqi_count_weekly?date=2021-01-22&grid=8`;
-  const demoApiCallString2 = `http://127.0.0.1:5000/pred_aqi_count_weekly?date=2021-01-22&grid=all`;
-};
-
 const GroupedBarChart = () => {
   const [barData, setBarData] = useState(null);
   const [date, setdate] = useState(formatDate(new Date()));
   const [gridValue, setgridValue] = useState("All");
+
+  const handleDateChange = (e) => {
+    if (Date.parse(e.target.value) > new Date()) {
+      alert("Choosen Date cannot be in future.");
+    } else {
+      setdate(formatDate(e.target.value));
+    }
+  };
 
   useEffect(() => {
     const apiData = async () => {
@@ -158,7 +151,7 @@ const GroupedBarChart = () => {
       <Card.Header>
         <div className="root_div">
           <div className="card_headers">
-            <Card.Title as="h4">Prediction Data</Card.Title>
+            <Card.Title as="h4">7 Day Air Quality Index</Card.Title>
             <span className="card-category">Last 7 days performance</span>
           </div>
           <div className="date_input">
@@ -166,7 +159,7 @@ const GroupedBarChart = () => {
             <input
               type="date"
               value={date}
-              onChange={(e) => setdate(formatDate(e.target.value))}
+              onChange={handleDateChange}
               name="date-input"
             />
           </div>

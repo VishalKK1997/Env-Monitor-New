@@ -12,18 +12,6 @@ const options = {
   legend: {
     display: true,
     position: "top",
-    // legendCallback: function (chart) {
-    //   // Return the HTML string here.
-    //   console.log(chart);
-    //   return [
-    //     <ul>
-    //       <li>z</li>
-    //       <li>zzzz</li>
-    //       <li>ppp</li>
-    //       <li>adasda</li>
-    //     </ul>,
-    //   ];
-    // },
   },
   elements: {
     arc: {
@@ -35,6 +23,14 @@ const options = {
 const PieChart = () => {
   const [date, setdate] = useState(formatDate(new Date()));
   const [chartData, setchartData] = useState(null);
+
+  const handleDateChange = (e) => {
+    if (Date.parse(e.target.value) > new Date()) {
+      alert("Choosen Date cannot be in future.");
+    } else {
+      setdate(formatDate(e.target.value));
+    }
+  };
 
   useEffect(() => {
     const apiData = async () => {
@@ -77,7 +73,7 @@ const PieChart = () => {
   return (
     <Card style={{ height: "100%" }}>
       <Card.Header>
-        <Card.Title as="h4">Prediction Data</Card.Title>
+        <Card.Title as="h4">Daily Air Quality</Card.Title>
         <p className="card-category">24 hrs performance</p>
       </Card.Header>
       <Card.Body>
@@ -91,7 +87,7 @@ const PieChart = () => {
             <input
               type="date"
               value={date}
-              onChange={(e) => setdate(formatDate(e.target.value))}
+              onChange={handleDateChange}
               name="date-input"
             />
           </div>

@@ -71,7 +71,9 @@ const RouteRecommender = () => {
     libraries,
   });
   const [currentpos, setCurrentpos] = useState(null);
+  const [currentPosName, setCurrentPosName] = useState("");
   const [destination, setDestination] = useState(null);
+  const [destinationName, setDestinationName] = useState("");
   const destRef = useRef(null);
   const isValid =
     (goValue || shortestRouteCheck || optimalRouteCheck || safestRouteCheck) &&
@@ -96,6 +98,10 @@ const RouteRecommender = () => {
     );
 
   const handleSubmit = async () => {
+    if (!currentpos && !destination) {
+      alert("Source or Destination cannot be empty.");
+      return;
+    }
     setloading(true);
     setcustomRoute(null);
     setshortestRoute(null);
@@ -234,6 +240,10 @@ const RouteRecommender = () => {
                     }
                     onPlaceChanged={() => {
                       if (autoCompleteSource !== null) {
+                        setCurrentPosName(
+                          autoCompleteSource.gm_accessors_.place.Ee
+                            .formattedPrediction
+                        );
                         setCurrentpos({
                           lat: autoCompleteSource
                             .getPlace()
@@ -255,6 +265,10 @@ const RouteRecommender = () => {
                       </InputGroup.Prepend>
 
                       <FormControl
+                        value={currentPosName}
+                        onChange={(event) => {
+                          setCurrentPosName(event.target.value);
+                        }}
                         disabled={checkboxVal}
                         ref={destRef}
                         // value={autoCompleteSource ? autoCompleteSource : ""}
@@ -279,6 +293,10 @@ const RouteRecommender = () => {
                     onLoad={(autocomplete) => setautoCompleteDest(autocomplete)}
                     onPlaceChanged={() => {
                       if (autoCompleteDest !== null) {
+                        setDestinationName(
+                          autoCompleteDest.gm_accessors_.place.Ee
+                            .formattedPrediction
+                        );
                         setDestination({
                           lat: autoCompleteDest
                             .getPlace()
@@ -299,6 +317,10 @@ const RouteRecommender = () => {
                         </InputGroup.Text>
                       </InputGroup.Prepend>
                       <FormControl
+                        value={destinationName}
+                        onChange={(event) => {
+                          setDestinationName(event.target.value);
+                        }}
                         ref={destRef}
                         id="destination_input"
                         aria-describedby="destination_input"
@@ -325,6 +347,7 @@ const RouteRecommender = () => {
                       tooltipLabel={(currentValue) => `${currentValue / 10}`}
                       tooltip="auto"
                       onChange={(e) => setAlphaValue(e.target.value)}
+                      disabled={!goValue}
                     />
                   </Form.Group>
 

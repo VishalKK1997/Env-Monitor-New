@@ -13,7 +13,7 @@ const MarkerWithInfoWindow = (props) => {
       }}
       icon={{
         url: props.icon,
-        scaledSize: new window.google.maps.Size(40, 40),
+        scaledSize: new window.google.maps.Size(25, 25),
       }}
     >
       {isClicked && (
