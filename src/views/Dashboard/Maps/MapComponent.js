@@ -20,7 +20,7 @@ const libraries = ["places"];
 
 const MapComponent = (props) => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyD7N-jRw9SqaWImlDL5YZU1FS56ImjzQOU",//process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
   });
 

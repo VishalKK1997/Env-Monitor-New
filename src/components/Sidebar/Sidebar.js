@@ -43,8 +43,10 @@ function Sidebar({ color, image, routes }) {
           >
             <div className="logo-img">
               <img
-                src={require("assets/img/reactlogo.png").default}
+                src={require("assets/img/leaf-logo.svg").default}
                 alt="..."
+                height="50px"
+                width="50px"
               />
             </div>
           </a>
