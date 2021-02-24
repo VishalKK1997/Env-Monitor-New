@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 
-const MapLegendItem = (props) => {
+const AQILegendItem = (props) => {
   const canvasFill = useCallback((node) => {
     if (node) {
       let ctx = node.getContext("2d");
@@ -9,14 +9,21 @@ const MapLegendItem = (props) => {
     }
   });
 
-  return (
-    <div style={{ fontSize: "0.9em" }}>
+  return props.titleFirst ? (
+    <>
+      <span style={{ padding: "5px" }}>{props.title}</span>
+      <span>
+        <canvas ref={canvasFill} id={props.title} height={15} width={25} />
+      </span>
+    </>
+  ) : (
+    <>
       <span>
         <canvas ref={canvasFill} id={props.title} height={15} width={25} />
       </span>
       <span style={{ padding: "5px" }}>{props.title}</span>
-    </div>
+    </>
   );
 };
 
-export default MapLegendItem;
+export default AQILegendItem;
