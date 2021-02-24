@@ -241,7 +241,7 @@ const RouteRecommender = () => {
                     onPlaceChanged={() => {
                       if (autoCompleteSource !== null) {
                         setCurrentPosName(
-                          autoCompleteSource.gm_accessors_.place.Ee
+                          autoCompleteSource.gm_accessors_.place.Le
                             .formattedPrediction
                         );
                         setCurrentpos({
@@ -294,7 +294,7 @@ const RouteRecommender = () => {
                     onPlaceChanged={() => {
                       if (autoCompleteDest !== null) {
                         setDestinationName(
-                          autoCompleteDest.gm_accessors_.place.Ee
+                          autoCompleteDest.gm_accessors_.place.Le
                             .formattedPrediction
                         );
                         setDestination({
