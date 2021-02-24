@@ -189,7 +189,7 @@ const RouteRecommender = () => {
   return (
     <Card className="root">
       <Card.Header>
-        <Card.Title as="h4">Route Recommendation</Card.Title>
+        <Card.Title as="h3"><strong>Route Recommendation</strong></Card.Title>
       </Card.Header>
       <Card.Body>
         <Container fluid="md">
